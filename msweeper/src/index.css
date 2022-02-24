@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.canvas-container {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+#main-canvas {
+    height: 85vh;
+    border:1px solid #000000;
+    margin: 1% 0 1% 0 ;
+    image-rendering: pixelated;
+}
