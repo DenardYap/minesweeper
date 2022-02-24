@@ -3,6 +3,7 @@ import "./index.css";
 // import "./game/game.js"
 import Game from "./Game"
 import Leaderboard from "./Leaderboard";
+import Test from "./test";
 
 const App = () => {
   return <div  className=" bg-gray-100">

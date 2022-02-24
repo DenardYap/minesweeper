@@ -5,8 +5,8 @@
 const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
 const ROW = 20;
-const COL = 40;
-const DEF_SIZE = 16;
+const COL = 30;
+const DEF_SIZE = 32;
 
 let block = document.getElementById("main-canvas");
 block.height = DEF_SIZE * ROW;
@@ -15,10 +15,10 @@ let context = block.getContext("2d");
 
 let rel_x = block.width / COL;
 let rel_y = block.height / ROW;
-console.log(rel_x, block.offsetWidth);
-console.log(window.innerWidth);
-console.log(rel_y, block.offsetHeight);
-console.log(window.innerHeight);
+// console.log(rel_x, block.offsetWidth);
+// console.log(window.innerWidth);
+// console.log(rel_y, block.offsetHeight);
+// console.log(window.innerHeight);
 let start_x = 0;
 let start_y = 0;
 
@@ -34,7 +34,8 @@ let start_y = 0;
 function make_base() {
   let square = new Image();
   console.log(square);
-  square.src = "../sprites/square.png";
+  square.src = "../public/images/square.png";
+
   square.onload = function () {
     context.imageSmoothingEnabled = false;
     for (let r = 0; r < ROW; r++) {
