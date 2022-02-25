@@ -1,0 +1,38 @@
+/** HIGH LEVEL OVERVIEW
+ * 
+ * 
+ * 
+ * Game.js
+ * board - 2d array 
+ * 
+ * row = 3
+ * col = 2
+ * 
+ * [[x x] * 3]
+ * 
+ * [1,2,3].map((e) => )
+ * 
+ * status, setstaus
+ * 
+ * board.map((r) => {
+ *  r.map(c) => {
+ *  return <Square key={(r, c)} status={status} click={clickfunction} />
+ * }
+ * })
+ * 
+ * Image.js
+ * 
+ * export const image {
+ *  name -> image string
+ * }
+ * 
+ * Square.js 
+ * 
+ * const square = ({status, click}) => {
+ *  
+ *  img = image.name
+ * 
+ *  return <img src={image.name} onclick={click}>
+ * 
+ * }
+ */

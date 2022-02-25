@@ -1,4 +1,4 @@
-const square_status = {
+const squareStatus = {
   SQUARE: "/images/square.png",
   FLAG: "/images/flag.png",
   QUESTION: "/images/question.png",
@@ -15,4 +15,4 @@ const square_status = {
   8: "/images/eight.png",
 };
 
-export default square_status;
+export default squareStatus;

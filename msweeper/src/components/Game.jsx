@@ -2,19 +2,19 @@
  * 1) smoothen on other browsers
  * 2)
  */
-import React from "react";
-// import Square from "./Square";
+import React, { useState } from "react";
+import Board from "./Board";
 
 const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
 
 // max size: 30 x 30
-const ROW = 20;
-const COL = 30;
-const DEF_SIZE = 40; //todo: change
-// let board = Array(ROW)
-//   .fill(null)
-//   .map(() => Array(COL));
+const ROW = 10;
+const COL = 10;
+const DEF_SIZE = 32; //todo: change
+let board = Array(ROW)
+  .fill(null)
+  .map(() => Array(COL));
 // 1000 // 20
 let height = DEF_SIZE * ROW;
 let width = DEF_SIZE * COL;
@@ -32,27 +32,27 @@ let start_x = 0;
 let start_y = 0;
 
 const Game = () => {
-  const canvas = React.useRef(null);
+  // const canvas = React.useRef(null);
 
-  React.useEffect(() => {
-    const context = canvas.current.getContext("2d");
-    let square = new Image();
-    square.src = "/images/square.png";
+  // React.useEffect(() => {
+  //   const context = canvas.current.getContext("2d");
+  //   let square = new Image();
+  //   square.src = "/images/square.png";
 
-    square.onload = function () {
-      context.imageSmoothingEnabled = false;
-      for (let r = 0; r < ROW; r++) {
-        for (let c = 0; c < COL; c++) {
-          context.drawImage(square, start_x, start_y, rel_x, rel_y);
-          // board[r][c] = new Square();
+  //   square.onload = function () {
+  //     context.imageSmoothingEnabled = false;
+  //     for (let r = 0; r < ROW; r++) {
+  //       for (let c = 0; c < COL; c++) {
+  //         context.drawImage(square, start_x, start_y, rel_x, rel_y);
+  //         board[r][c] = new Square();
 
-          start_x += rel_x;
-        }
-        start_x = 0;
-        start_y += rel_y;
-      }
-    };
-  }, []);
+  //         start_x += rel_x;
+  //       }
+  //       start_x = 0;
+  //       start_y += rel_y;
+  //     }
+  //   };
+  // }, []);
 
   // for
   //   for
