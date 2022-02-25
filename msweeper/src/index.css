@@ -2,14 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-.canvas-container {
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-}
-#main-canvas {
-    height: 85vh;
-    border:1px solid #000000;
-    margin: 1% 0 1% 0 ;
-    image-rendering: pixelated;
+.iteminvisible {
+    flex: 0 1 auto;
+    width: 25vw;
+    /* height: 100px; */
+    visibility: hidden;
+  }
+
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* Chromium */
+    /* width: 5vw; */
+    height: 30vh;
+    /* padding: 0 5px; */
+    /* margin: 0 50%; */
 }

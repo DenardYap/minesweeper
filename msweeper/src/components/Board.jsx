@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Square from "./Square";
 
 // max is 30 x 30
-const DEFAULT_ROW = 10;
-const DEFAULT_COL = 30;
+const DEFAULT_ROW = 15;
+const DEFAULT_COL = 20;
 
 const rel = (1/Math.max(DEFAULT_ROW, DEFAULT_COL) * 75).toString() + "vh"; 
 // Convert to percentage

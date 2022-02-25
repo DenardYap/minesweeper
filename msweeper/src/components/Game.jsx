@@ -68,7 +68,7 @@ const Game = () => {
     // className="mt-8 border-4 border-solid border-r-white border-b-white border-t-[#7b7b7b] bordeer-l-[#7b7b7b]"
 
     // Container
-    <div className="bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999]">
+    <div className="  bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999]">
       
       
       {/* Header */}  

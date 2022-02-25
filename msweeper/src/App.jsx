@@ -2,9 +2,11 @@ import React from "react";
 // import "./game/game.js"
 import Game from "./components/Game";
 import Leaderboard from "./components/Leaderboard";
+import Slider from "./Slider";
 import "./index.css";
 
 const App = () => {
+
   return (
     <div className=" bg-gray-100">
       <div id="main-container flex flex-column my-1 items-center">
@@ -19,8 +21,10 @@ const App = () => {
           </button>
         </div>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center bg-slate-200">
+        <div class="iteminvisible">Other</div>
             <Game/>
+            <Slider/>
         </div>
 
         <div className="flex text-left font-mono mx-10">
