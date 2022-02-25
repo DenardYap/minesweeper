@@ -3,7 +3,7 @@
  * 2)
  */
 import React from "react";
-import Square from "./Square";
+import Square from "../Square";
 
 const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
@@ -12,7 +12,9 @@ const CUR_HEIGHT = window.innerHeight;
 const ROW = 10;
 const COL = 10;
 const DEF_SIZE = 32; //todo: change
-let board = Array(ROW).fill(null).map(() => Array(COL));
+let board = Array(ROW)
+  .fill(null)
+  .map(() => Array(COL));
 // 1000 // 20
 const height = DEF_SIZE * ROW;
 const width = DEF_SIZE * COL;
@@ -35,7 +37,7 @@ const Game = () => {
       for (let r = 0; r < ROW; r++) {
         for (let c = 0; c < COL; c++) {
           context.drawImage(square, start_x, start_y, rel_x, rel_y);
-          board[r][c] = new Square()
+          board[r][c] = new Square();
 
           start_x += rel_x;
         }
@@ -45,18 +47,17 @@ const Game = () => {
     };
   }, []);
 
-  // for 
-  //   for 
+  // for
+  //   for
   //     <Square key= {r, c}  />
 
   //     const Square = () => {
-  //       change image 
+  //       change image
   //       return (
   //         <div></div>
-        )
   //     }</Square>
 
-//   return (
+  return (
     <div className="flex justify-center m-5 bg-black">
       <div className="bg-[#c2c2c2] p-6 border-4 border-r-[#999] border-b-[#999] border-t-white border-l-white max-w-fit">
         {/* Header */}
