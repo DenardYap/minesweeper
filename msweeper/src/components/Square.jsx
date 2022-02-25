@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import squareStatus from "../utils/squareStatus";
 
 const moves = {
   0: [0, 1],
@@ -10,9 +11,16 @@ const moves = {
   6: [-1, 1],
   7: [-1, -1],
 };
-
-const Square = () => {
-  return <div className="bg-white h-4 w-4m-1"></div>;
+var loc = window.location.pathname;
+var dir = loc.substring(0, loc.lastIndexOf('/'));
+console.log(dir);
+const Square = ({rel}) => {
+  const [imgSrc, setImgSrc] = useState(squareStatus.SQUARE);
+  return <div className="bg-white" onClick={() => {
+    setImgSrc(squareStatus.BOMB)
+  }}>
+    <img style={{height: rel}} src={imgSrc} />
+  </div>;
 };
 
 export default Square;
