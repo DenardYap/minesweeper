@@ -2,8 +2,8 @@
  * 1) smoothen on other browsers
  * 2)
  */
-import React from "react";
-import Square from "../Square";
+import React, { useState } from "react";
+import Board from "./Board";
 
 const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
@@ -25,37 +25,27 @@ let start_x = 0;
 let start_y = 0;
 
 const Game = () => {
-  const canvas = React.useRef(null);
+  // const canvas = React.useRef(null);
 
-  React.useEffect(() => {
-    const context = canvas.current.getContext("2d");
-    let square = new Image();
-    square.src = "/images/square.png";
+  // React.useEffect(() => {
+  //   const context = canvas.current.getContext("2d");
+  //   let square = new Image();
+  //   square.src = "/images/square.png";
 
-    square.onload = function () {
-      context.imageSmoothingEnabled = false;
-      for (let r = 0; r < ROW; r++) {
-        for (let c = 0; c < COL; c++) {
-          context.drawImage(square, start_x, start_y, rel_x, rel_y);
-          board[r][c] = new Square();
+  //   square.onload = function () {
+  //     context.imageSmoothingEnabled = false;
+  //     for (let r = 0; r < ROW; r++) {
+  //       for (let c = 0; c < COL; c++) {
+  //         context.drawImage(square, start_x, start_y, rel_x, rel_y);
+  //         board[r][c] = new Square();
 
-          start_x += rel_x;
-        }
-        start_x = 0;
-        start_y += rel_y;
-      }
-    };
-  }, []);
-
-  // for
-  //   for
-  //     <Square key= {r, c}  />
-
-  //     const Square = () => {
-  //       change image
-  //       return (
-  //         <div></div>
-  //     }</Square>
+  //         start_x += rel_x;
+  //       }
+  //       start_x = 0;
+  //       start_y += rel_y;
+  //     }
+  //   };
+  // }, []);
 
   return (
     <div className="flex justify-center m-5 bg-black">
@@ -65,12 +55,13 @@ const Game = () => {
           Header
         </div>
         {/* Body */}
-        <canvas
+        {/* <canvas
           ref={canvas}
           className="mt-8 border-4 border-solid border-r-white border-b-white border-t-[#7b7b7b] bordeer-l-[#7b7b7b]"
           height={height}
           width={width}
-        ></canvas>
+        ></canvas> */}
+        <Board />
       </div>
     </div>
   );
