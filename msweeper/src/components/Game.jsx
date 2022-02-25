@@ -9,8 +9,8 @@ const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
 
 // max size: 30 x 30
-const ROW = 10;
-const COL = 10;
+const ROW = 30;
+const COL = 30;
 const DEF_SIZE = 32; //todo: change
 let board = Array(ROW)
   .fill(null)
@@ -68,12 +68,34 @@ const Game = () => {
     // className="mt-8 border-4 border-solid border-r-white border-b-white border-t-[#7b7b7b] bordeer-l-[#7b7b7b]"
 
     // Container
-    <div className=" h-[85vh] max-w-[98vw] bg-black">
-      {/* Header */}
-      {/* Face */}
+    <div className="  bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999]">
+      
+      
+      {/* Header */}  
+      <div 
+      className="flex bg-[#c0c0c0] px-2 
+      border-solid border-4 
+      border-r-white border-b-white 
+      border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between"> 
+      
+      {/* Face  */}
+      <div className="m-2 flex w-fit">
 
+        <img src="/images/0.png"/>
+        <img src="/images/0.png"/>
+        <img src="/images/0.png"/>
+      </div>
+      <input type="image" src="/images/smile.png" className="m-2"/>
+      
+      <div className="m-2 flex w-fit">
+
+        <img src="/images/0.png"/>
+        <img src="/images/0.png"/>
+        <img src="/images/0.png"/>
+      </div>
+      </div>
       {/* Body */}
-      <canvas ref={canvas} className="" height={height} width={width}></canvas>
+      <div className="mt-4 border-4 border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b]"> <Board /></div>
     </div>
   );
 };

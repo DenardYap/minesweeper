@@ -2,6 +2,7 @@ import React from "react";
 // import "./game/game.js"
 import Game from "./components/Game";
 import Leaderboard from "./components/Leaderboard";
+import Slider from "./Slider";
 import "./index.css";
 
 const App = () => {
