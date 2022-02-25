@@ -18,9 +18,9 @@ const App = () => {
             Sign up
           </button>
         </div>
-        
+
         <div className="flex justify-center">
-            </Game>
+          <Game />
         </div>
 
         <div className="flex text-left font-mono mx-10">
