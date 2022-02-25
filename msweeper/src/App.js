@@ -15,7 +15,9 @@ const App = () => {
             <button  className="bg-slate-500 hover:font-bold text-inherit text-white rounded p-2 m-5 shadow-md hover:shadow-lg">Sign up</button>
         </div>
 
+        <div className="flex justify-center">
             <Game></Game>
+        </div>
         <div className="flex text-left font-mono mx-10">
 
           <Leaderboard></Leaderboard>

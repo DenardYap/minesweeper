@@ -3,19 +3,28 @@
  * 2)
  */
 import React from "react";
-import Square from "./Square";
+// import Square from "./Square";
 
 const CUR_WIDTH = window.innerWidth;
 const CUR_HEIGHT = window.innerHeight;
 
 // max size: 30 x 30
-const ROW = 10;
-const COL = 10;
-const DEF_SIZE = 32; //todo: change
-let board = Array(ROW).fill(null).map(() => Array(COL));
+const ROW = 20;
+const COL = 30;
+const DEF_SIZE = 40; //todo: change
+// let board = Array(ROW)
+//   .fill(null)
+//   .map(() => Array(COL));
 // 1000 // 20
-const height = DEF_SIZE * ROW;
-const width = DEF_SIZE * COL;
+let height = DEF_SIZE * ROW;
+let width = DEF_SIZE * COL;
+
+// if (width >= CUR_WIDTH) {
+//   let factor = ROW / COL;
+//   width = CUR_WIDTH;
+//   height = CUR_WIDTH * factor;
+// }
+console.log(CUR_WIDTH, width);
 
 let rel_x = width / COL;
 let rel_y = height / ROW;
@@ -35,7 +44,7 @@ const Game = () => {
       for (let r = 0; r < ROW; r++) {
         for (let c = 0; c < COL; c++) {
           context.drawImage(square, start_x, start_y, rel_x, rel_y);
-          board[r][c] = new Square()
+          // board[r][c] = new Square();
 
           start_x += rel_x;
         }
@@ -45,32 +54,26 @@ const Game = () => {
     };
   }, []);
 
-  // for 
-  //   for 
+  // for
+  //   for
   //     <Square key= {r, c}  />
 
   //     const Square = () => {
-  //       change image 
+  //       change image
   //       return (
   //         <div></div>
-        )
   //     }</Square>
 
-//   return (
-    <div className="flex justify-center m-5 bg-black">
-      <div className="bg-[#c2c2c2] p-6 border-4 border-r-[#999] border-b-[#999] border-t-white border-l-white max-w-fit">
-        {/* Header */}
-        <div className="bg-[#c0c0c0] px-10 py-12 border-4 border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] ">
-          Header
-        </div>
-        {/* Body */}
-        <canvas
-          ref={canvas}
-          className="mt-8 border-4 border-solid border-r-white border-b-white border-t-[#7b7b7b] bordeer-l-[#7b7b7b]"
-          height={height}
-          width={width}
-        ></canvas>
-      </div>
+  return (
+    // className="mt-8 border-4 border-solid border-r-white border-b-white border-t-[#7b7b7b] bordeer-l-[#7b7b7b]"
+
+    // Container
+    <div className=" h-[85vh] max-w-[98vw] bg-black">
+      {/* Header */}
+      {/* Face */}
+
+      {/* Body */}
+      <canvas ref={canvas} className="" height={height} width={width}></canvas>
     </div>
   );
 };
