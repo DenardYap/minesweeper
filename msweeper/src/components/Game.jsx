@@ -6,19 +6,128 @@ import React, { useEffect, useState } from "react";
 import Board from "./Board";
 import Slider from "./Slider";
 
+const moves = [
+  [0, 1],
+  [0, -1],
+  [1, 0],
+  [-1, 0],
+  [1, 1],
+  [1, -1],
+  [-1, 1],
+  [-1, -1],
+]
+
 const DEFAULT = {
   col: 10,
   row: 10,
   bomb: 10
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+const RandomizeCoordinates = () => {
+  // if the coordinate is generated, repeat the random 
+  // until no more repeated value 
+  // use a set to keep track of the current generate coor. 
+
+  // pseudocode
+  // while:
+  //   generate
+  //   if generated coor in set:
+  //     generate again 
+  //   board[generated_grid].status = bomb 
+}
+
+const getGrid = (rowSize, colSize) => {
+  
+  const grid = [];
+  for (let row = 0; row < rowSize; row++) {
+    const currentRow = [];
+    for (let col = 0; col < colSize; col++) {
+      
+      currentRow.push({
+        status: "SQUARE", //SQUARE, BLANK, BOMB, BOMBX, FLAG, QUESTION
+        coordinate: [row, col],
+        bombCount: 0
+      });
+    }
+    grid.push(currentRow);
+  }
+  return grid;
+};
+
+const DEFAULT_VIEW_HEIGHT = 80;
 const Game = () => {
+  
+  const [gameOver, setGameOver] = useState(false);
   const [column, setColumn] = useState(DEFAULT.col);
   const [row, setRow] = useState(DEFAULT.row);
   const [bomb, setBomb] = useState(DEFAULT.bomb);
-  // const [rel, setRel] = useState((1/Math.max(row, column) * 75).toString() + "vh"); 
-    
-  const handleChange = (new_col, new_row, new_bomb) => {
+  const [isFirstClick, setIsFirstClick] = useState(true)
+  const [grid, setGrid] = useState(getGrid(row, column));
+
+  let rel = (1/Math.max(row, column) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
+  useEffect(() => {
+    //remember to reset
+    setGrid(getGrid(row, column))
+    rel = (1/Math.max(row, column) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
+  }, [column, row]) //todo: also put DEFAULT_BOMB
+  
+    // function to check and update surrounding
+    // images' bombCount
+    function updateBombCount(r, c) {
+      for (let i = 0; i < 8; i++) {
+        let new_r = r + moves[i][0]
+        let new_c = c + moves[i][1]
+        if (new_r >= 0 && new_r < row && new_c >= 0 && new_c < column) {
+          console.log(new_r, new_c)
+          grid[new_r][new_c].bombCount += 1;
+        }
+      }
+    }
+
+  // onClick function for image  
+  const squareClickHandler = (event, coordinate) => {
+    console.log(grid[coordinate[0]][coordinate[1]])
+    if (isFirstClick) {
+      setIsFirstClick(false);
+      //Generate bomb
+      
+      let rand_row = getRandomInt(row);
+      let rand_col = getRandomInt(column); 
+      let curBombCount = 0;
+      while (curBombCount != bomb) {
+        console.log(grid[rand_row][rand_col])
+        console.log(row, column, bomb, curBombCount)
+        // TODO: make sure don't generate bomb on the first click 
+        if (grid[rand_row][rand_col].status != "BOMB") {
+          console.log("Hi2")
+          curBombCount += 1
+          console.log("Hi3")
+          grid[rand_row][rand_col].status = "BOMB";
+          console.log("Hi4")
+          updateBombCount(rand_row, rand_col);
+          console.log("Hi5")
+        } 
+        
+        console.log("Hi6")
+        rand_row = getRandomInt(row);
+        console.log("Hi7")
+        rand_col = getRandomInt(column); 
+        console.log("Hi8")
+        
+      }
+      console.log("Hi4")
+      console.log(rand_col, rand_row)
+      // if 
+    }
+    console.log(coordinate)
+  }
+
+  // handleChange function for Slider
+  const handleChange = (new_row, new_col, new_bomb) => {
     console.log(parseInt(new_col), parseInt(new_row), parseInt(new_bomb))
     setColumn(parseInt(new_col));  
     setRow(parseInt(new_row)); 
@@ -59,7 +168,7 @@ const Game = () => {
         </div>
       </div>
       
-      <div className="  bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999]">
+      <div className="  bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
         
         
         {/* Header */}  
@@ -86,8 +195,8 @@ const Game = () => {
         </div>
         </div>
         {/* Body */}
-        <div className="mt-4 border-4 border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b]"> 
-        <Board column={column} row={row} bomb={bomb}/>
+        <div className="mt-4 border-4 border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit"> 
+        <Board column={column} row={row} bomb={bomb} squareClickHandler={squareClickHandler} grid={grid} rel={rel}/>
         </div>
       </div>
       

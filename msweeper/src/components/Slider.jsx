@@ -41,7 +41,7 @@ const Slider = ({handleChange}) => {
 
     </div>
     <div className='flex justify-center'>
-    <input className=" w-[33%] rounded bg-slate-600 text-slate-100 py-3 hover:bg-slate-400 hover:border-2 border-black hover:cursor-pointer " type="submit" value="Submit"/>
+    <input type="submit" value="Submit" className="w-[33%] rounded bg-slate-600 text-slate-100 py-3 hover:bg-slate-400 hover:border-2 border-black hover:cursor-pointer " />
 
     </div>
 </form>

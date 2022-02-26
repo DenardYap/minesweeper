@@ -1,3 +1,5 @@
+THE DOCS!!!
+
 /** HIGH LEVEL OVERVIEW
  * 
  * 
@@ -35,4 +37,40 @@
  *  return <img src={image.name} onclick={click}>
  * 
  * }
+
+ 2/25/2022
+ 
+    /** 1. Check if it's first click 
+     * - Generate bombs based on the `bomb` variable 
+     * - Increment the bombCount at the surroundings 
+     * - Randomize grids and column within the range of
+     *   `column` and `row`
+     * 
+     * - updateBombCount -> for every generated bomb, update 
+     *                      the surrounding squares' bombCount
+     * - blankSquareBFS -> if the current square has a bombCount  *This function is called everything a blank square is clicked*
+     *                     of 0, change the current square status 
+     *                     to blank, and expose the surroundings 
+     *                     square, keep BFS until found a number 
+     * - Concerns: Might be too slow to generate 900 grids at first go 
+     *  X X 3 1 1 0
+     *  4 X 4 X 2 1
+     *  3 X 4 2 X 2
+     *  2 X 2 1 3 X
+     *  1 1 1 0 2 X
+     * 
+     * square {
+     *  coordinate:
+     *  status: BOMB,
+     *  bombCount:
+     * }
+     * 
+     *  2. onClick event -> squareClickHandler 
+     *    i) number -> open one square
+     *    ii) bomb -> die and set setGameOver(True)
+     *    iii) 
+     *    iv) right click 
+     *      - not flagged -> flagged
+     *      - flagged -> 
+     */
  */
