@@ -1,4 +1,4 @@
-const squareStatus = {
+export const squareStatus: Record<string | number, string> = {
   SQUARE: "/images/square.png",
   FLAG: "/images/flag.png",
   QUESTION: "/images/question.png",
@@ -14,5 +14,3 @@ const squareStatus = {
   7: "/images/seven.png",
   8: "/images/eight.png",
 };
-
-export default squareStatus;
