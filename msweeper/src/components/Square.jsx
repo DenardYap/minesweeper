@@ -9,6 +9,7 @@ const Square = ({ rel, imgStatus, imgSrc, squareClickHandler, coordinate }) => {
   const [src, setSrc] = useState(squareStatus.SQUARE);
   const [status, setStatus] = useState("SQUARE");
 
+  console.log("switching to typescript");
   useEffect(() => {
     setStatus(imgStatus);
   }, [imgStatus]);
