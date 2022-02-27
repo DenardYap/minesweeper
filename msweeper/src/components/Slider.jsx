@@ -29,7 +29,15 @@ const Slider = ({handleChange}) => {
 
           <div className="flex flex-col">
               <label htmlFor="col-slider">Column</label>
-              <input type="range" min = "10" max = "30" defaultValue="10" step="1" id="col-slider" name="col-slider" orient="vertical"  onChange={changeCol} />
+              <input type="range" 
+              min = "10" 
+              max = "30" 
+              defaultValue="10" 
+              step="1" 
+              id="col-slider" 
+              name="col-slider" 
+              orient="vertical"  
+              onChange={changeCol} />
               <h2>{col}</h2>
           </div>
 
