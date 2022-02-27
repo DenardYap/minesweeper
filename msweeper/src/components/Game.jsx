@@ -40,6 +40,24 @@ const RandomizeCoordinates = () => {
   //   board[generated_grid].status = bomb 
 }
 
+// function bfs(row, col, grid) {
+//   // args: row, col
+//   // let new queue 
+//   // append([row, col])
+
+//   // while queue is not null
+//   //      square = queue.pop
+//   //      if square.bombcount == 0
+//   //          queue.append(8)
+//   //          
+//   let queue = []
+//   q.push([row, col])
+//   while (q.length != 0) {
+//     const coordinate = queue.shift()
+//     if 
+//   }
+// }
+
 const getGrid = (rowSize, colSize) => {
   
   const grid = [];
@@ -49,6 +67,7 @@ const getGrid = (rowSize, colSize) => {
       
       currentRow.push({
         status: "SQUARE", //SQUARE, BLANK, BOMB, BOMBX, FLAG, QUESTION
+        imgSrc: "SQUARE",
         coordinate: [row, col],
         bombCount: 0
       });
@@ -67,30 +86,36 @@ const Game = () => {
   const [bomb, setBomb] = useState(DEFAULT.bomb);
   const [isFirstClick, setIsFirstClick] = useState(true)
   const [grid, setGrid] = useState(getGrid(row, column));
+  const [totalGrid, setTotalGrid] = useState(row * column - bomb)
+  const [asd, setAsd] = useState(false);
 
   let rel = (1/Math.max(row, column) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
   useEffect(() => {
     //remember to reset
     setGrid(getGrid(row, column))
     rel = (1/Math.max(row, column) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
-  }, [column, row]) //todo: also put DEFAULT_BOMB
+  }, [column, row, bomb]) //todo: also put DEFAULT_BOMB
   
-    // function to check and update surrounding
-    // images' bombCount
-    function updateBombCount(r, c) {
-      for (let i = 0; i < 8; i++) {
-        let new_r = r + moves[i][0]
-        let new_c = c + moves[i][1]
-        if (new_r >= 0 && new_r < row && new_c >= 0 && new_c < column) {
-          console.log(new_r, new_c)
-          grid[new_r][new_c].bombCount += 1;
-        }
+  function reset() {
+    setIsFirstClick(true);
+    setGrid(getGrid(row, column))
+    setGameOver(false)
+  }
+  // function to check and update surrounding
+  // images' bombCount
+  function updateBombCount(r, c) {
+    for (let i = 0; i < 8; i++) {
+      let new_r = r + moves[i][0]
+      let new_c = c + moves[i][1]
+      if (new_r >= 0 && new_r < row && new_c >= 0 && new_c < column) {
+        grid[new_r][new_c].bombCount += 1;
       }
     }
+  }
 
   // onClick function for image  
-  const squareClickHandler = (event, coordinate) => {
-    console.log(grid[coordinate[0]][coordinate[1]])
+  const squareClickHandler = (event, curRow, curCol) => {
+
     if (isFirstClick) {
       setIsFirstClick(false);
       //Generate bomb
@@ -99,36 +124,56 @@ const Game = () => {
       let rand_col = getRandomInt(column); 
       let curBombCount = 0;
       while (curBombCount != bomb) {
-        console.log(grid[rand_row][rand_col])
-        console.log(row, column, bomb, curBombCount)
-        // TODO: make sure don't generate bomb on the first click 
-        if (grid[rand_row][rand_col].status != "BOMB") {
-          console.log("Hi2")
+        if (grid[rand_row][rand_col].status != "BOMB" 
+        && (rand_row != curRow || rand_col != curCol)) {
           curBombCount += 1
-          console.log("Hi3")
           grid[rand_row][rand_col].status = "BOMB";
-          console.log("Hi4")
           updateBombCount(rand_row, rand_col);
-          console.log("Hi5")
-        } 
+          console.log(rand_row, rand_col)
+        } else {
+          console.log("got repeated bomb");
+        }
+
         
-        console.log("Hi6")
         rand_row = getRandomInt(row);
-        console.log("Hi7")
         rand_col = getRandomInt(column); 
-        console.log("Hi8")
         
       }
-      console.log("Hi4")
-      console.log(rand_col, rand_row)
-      // if 
+
+      // perform BFS here
+
     }
-    console.log(coordinate)
+    else {
+      // if it's a bomb
+      if (grid[curRow][curCol].status == "BOMB"){
+        // asd ?  setAsd(false) : setAsd(true) 
+        setGameOver(true)
+        grid[curRow][curCol].imgSrc = "BOMB";
+        // todo: do more stuff here
+      }
+      else if (grid[curRow][curCol].status == "SQUARE"){
+        console.log("Bomb Count: ", grid[curRow][curCol].bombCount)
+        if (grid[curRow][curCol].bombCount == 0) {
+          asd ?  setAsd(false) : setAsd(true)
+          grid[curRow][curCol].imgSrc = "BLANK"
+          // do BFS
+        } 
+        else {
+          // got a number, change img src
+          // setTotalGrid(totalGrid - 1)
+          asd ?  setAsd(false) : setAsd(true)
+          grid[curRow][curCol].imgSrc = grid[curRow][curCol].bombCount
+        }
+        
+      }
+      // setGrid(grid);
+    }
   }
 
   // handleChange function for Slider
   const handleChange = (new_row, new_col, new_bomb) => {
-    console.log(parseInt(new_col), parseInt(new_row), parseInt(new_bomb))
+    // todo: able to reset same value
+    setIsFirstClick(true)
     setColumn(parseInt(new_col));  
     setRow(parseInt(new_row)); 
     setBomb(parseInt(new_bomb));   
@@ -140,9 +185,9 @@ const Game = () => {
       {/* Sign up and Name */}
       <div className="flex flex-col  w-[30%] ">
 
-        <div className="flex flex-row ">
+        <div className="flex flex-row text-[100%]">
           
-            <button className="w-[25%] h-[5vh] mx-3 text-center bg-slate-500 hover:font-bold text-inherit  text-white rounded  shadow-md hover:shadow-lg">
+            <button className="w-[25%] h-[5vh] mx-[1vw] text-[3vh] text-center inline-block bg-slate-500 hover:font-bold text-inherit  text-white rounded  shadow-md hover:shadow-lg">
               Sign up
             </button>
 
@@ -153,6 +198,7 @@ const Game = () => {
             />
         </div>
 
+        {/* Content */}
         <p className="m-3" style={{fontFamily: "Pangolin", fontSize: "150%"}}>
         <strong> Hello and welcome to msweeper.com!
           </strong>  <br/><br/>
@@ -162,32 +208,32 @@ const Game = () => {
         
         </p>
         <div className="flex flex-row justify-between m-3">
-          <button className="rounded bg-slate-600 text-slate-100 p-5 m-3 hover:bg-slate-400 hover:border-2 border-black"  style={{fontFamily: "Pangolin", fontSize: "150%"}}>How to Play</button> 
-          <button className="rounded bg-slate-600 text-slate-100 p-5 m-3 hover:bg-slate-400 hover:border-2 border-black"  style={{fontFamily: "Pangolin", fontSize: "150%"}}>How does this website work</button>
+          <button className="rounded bg-slate-600 text-slate-100 p-[2vw] m-[1vw] hover:bg-slate-400 hover:border-2 border-black"  style={{fontFamily: "Pangolin", fontSize: "150%"}}>How to Play</button> 
+          <button className="rounded bg-slate-600 text-slate-100 p-[2vw] m-[1vw] hover:bg-slate-400 hover:border-2 border-black"  style={{fontFamily: "Pangolin", fontSize: "150%"}}>How does this website work</button>
 
         </div>
       </div>
       
-      <div className="  bg-[#c2c2c2] p-4 border-solid border-4 border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
+      <div className="  bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
         
-        
+          
         {/* Header */}  
         <div 
-        className="flex bg-[#c0c0c0] px-2 
-        border-solid border-4 
+        className="flex bg-[#c0c0c0] px-[0.5vw] 
+        border-solid border-[0.4vw]
         border-r-white border-b-white 
         border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between"> 
         
         {/* Face  */}
-        <div className="m-2 flex w-fit">
+        <div className="m-[0.5vw] flex w-fit">
 
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
         </div>
-        <input type="image" src="/images/smile.png" className="m-2"/>
+        <input type="image" src="/images/smile.png" className="m-[0.5vw]"/>
         
-        <div className="m-2 flex w-fit">
+        <div className="m-[0.5vw] flex w-fit">
 
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
@@ -195,7 +241,7 @@ const Game = () => {
         </div>
         </div>
         {/* Body */}
-        <div className="mt-4 border-4 border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit"> 
+        <div className="mt-[2vh] border-[0.4vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit"> 
         <Board column={column} row={row} bomb={bomb} squareClickHandler={squareClickHandler} grid={grid} rel={rel}/>
         </div>
       </div>
