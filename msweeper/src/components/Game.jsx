@@ -19,7 +19,7 @@ const moves = [
 
 const DEFAULT = {
   col: 10,
-  row: 10,
+  row: 30,
   bomb: 10
 }
 
@@ -181,7 +181,7 @@ const Game = () => {
 
   return (
     
-    <div className="flex justify-between  pt-[2vh]">
+    <div className="flex justify-between pt-[2vh]">
       {/* Sign up and Name */}
       <div className="flex flex-col  w-[30%] ">
 
@@ -214,34 +214,37 @@ const Game = () => {
         </div>
       </div>
       
-      <div className="  bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
+        {/* Body */}
+      <div className="bg-[#c2c2c2] p-[1vw] border-solid border-[0.3vw] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit">
         
           
         {/* Header */}  
         <div 
-        className="flex bg-[#c0c0c0] px-[0.5vw] 
-        border-solid border-[0.4vw]
+        className="flex flex-row bg-[#c0c0c0] px-[0.5vw] 
+        border-solid border-[0.3vw]
         border-r-white border-b-white 
-        border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between"> 
+        border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between "> 
         
-        {/* Face  */}
-        <div className="m-[0.5vw] flex w-fit">
+        {/* Number 1 */}
+        <div className="m-[0.5vw] flex">
 
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
         </div>
+
+        {/* Face  */}
         <input type="image" src="/images/smile.png" className="m-[0.5vw]"/>
         
-        <div className="m-[0.5vw] flex w-fit">
+        {/* Number 2 */}
+        <div className="m-[0.5vw] flex">
 
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
           <img src="/images/0.png"/>
         </div>
         </div>
-        {/* Body */}
-        <div className="mt-[2vh] border-[0.4vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit"> 
+        <div className="mt-[2vh] border-[0.3vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b]"> 
         <Board column={column} row={row} bomb={bomb} squareClickHandler={squareClickHandler} grid={grid} rel={rel}/>
         </div>
       </div>
@@ -254,39 +257,3 @@ const Game = () => {
 };
 
 export default Game;
-
-
-// function make_base() {
-//   let square = new Image();
-//   square.src = "../sprites/square.png";
-//   square.onload = function () {
-//     context.imageSmoothingEnabled = false;
-//     for (let r = 0; r < ROW; r++) {
-//       for (let c = 0; c < COL; c++) {
-//         context.drawImage(square, start_x, start_y, rel_x, rel_y);
-
-//         start_x += rel_x;
-//       }
-//       start_x = 0;
-//       start_y += rel_y;
-//     }
-//   };
-// }
-// make_base();
-
-// for (let i = 0; i <= 500; i++) {
-//   var img = document.createElement("img");
-//   img.src = "../sprites/square.png";
-//   img.width = "30";
-//   block.appendChild(img);
-// }
-
-// import { createBoard } from "./Board";
-
-// const board = createBoard(2, 2, 2);
-
-// board.forEach((row) => {
-//   row.forEach((tile) => {
-//     boardElement.append(tile.element);
-//   });
-// });
