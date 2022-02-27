@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
-import squareStatus from "../utils/squareStatus";
+import { Coordinate } from "../types/SquareType";
+import { squareStatus } from "../utils/squareStatus";
 
 // var loc = window.location.pathname;
 // var dir = loc.substring(0, loc.lastIndexOf('/'));
 // console.log(dir);
 
-const Square = ({ rel, imgStatus, imgSrc, squareClickHandler, coordinate }) => {
+interface SquareProps {
+  rel: string;
+  imgStatus: string;
+  imgSrc: string | number;
+  handleSquareOnClick: (event: any, curRow: number, curCol: number) => void;
+  coordinate: Coordinate;
+}
+
+const Square: React.FC<SquareProps> = ({
+  rel,
+  imgStatus,
+  imgSrc,
+  handleSquareOnClick,
+  coordinate,
+}) => {
   const [src, setSrc] = useState(squareStatus.SQUARE);
   const [status, setStatus] = useState("SQUARE");
 
-  console.log("switching to typescript");
   useEffect(() => {
     setStatus(imgStatus);
   }, [imgStatus]);
@@ -21,7 +35,7 @@ const Square = ({ rel, imgStatus, imgSrc, squareClickHandler, coordinate }) => {
   return (
     <div
       className="bg-white"
-      onClick={(e) => squareClickHandler(e, coordinate[0], coordinate[1])}
+      onClick={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
     >
       <img style={{ height: rel }} src={src} />
     </div>

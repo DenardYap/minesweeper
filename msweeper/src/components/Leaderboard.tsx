@@ -1,6 +1,8 @@
 import React from "react";
 
-const Leaderboard = () => {
+interface LeaderboardProps {}
+
+const Leaderboard: React.FC<LeaderboardProps> = () => {
   return (
     <div>
       <h1 className="underline text-4xl my-5 font-bold">Hard</h1>
