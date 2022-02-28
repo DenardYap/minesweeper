@@ -14,6 +14,7 @@ import Board from "./Board";
 import Slider from "./Slider";
 import Flag from "./Flag";
 import { Coordinate, SquareObject } from "../types/SquareType";
+import { Console } from "console";
 export const moves = [
   [0, 1],
   [0, -1],
@@ -47,6 +48,8 @@ const Game: React.FC<GameProps> = () => {
   const [asd, setAsd] = useState(false);
   const [gameWon, setGameWon] = useState(false);
 
+  const [mouseDown, setMouseDown] = useState(false);
+
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
 
@@ -64,6 +67,7 @@ const Game: React.FC<GameProps> = () => {
     setTotalGrid(row * column - bombCount);
     setGameOver(false);
     setGameWon(false);
+    setStartTimer(false);
 
     //disable interval
   }
@@ -84,16 +88,17 @@ const Game: React.FC<GameProps> = () => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       console.log("win");
       setGameWon(true);
+      setStartTimer(false);
     }
   }, [flag, totalGrid]);
-
+  
   const handleRightClick = (
     event: React.MouseEvent<HTMLElement>,
     curRow: number,
     curCol: number
   ) => {
     event.preventDefault(); //prevent the default pop up menu
-    if (!isFirstClick && !gameOver) {
+    if (!isFirstClick && !gameOver && !gameWon) {
       if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
         grid[curRow][curCol].imgSrc = "FLAG";
         setFlag((flag) => flag + 1);
@@ -109,67 +114,90 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-    if (!gameOver) {
-      if (isFirstClick) {
-        setStartTimer(true);
-        // timer();
-        setIsFirstClick(false);
-        //Generate bomb
-        let invalidRow = new Set([curRow, curRow + 1, curRow - 1]);
-        let invalidCol = new Set([curCol, curCol + 1, curCol - 1]);
+    if (event.button == 0) {
+      console.log(event.type)
+      if (!gameOver && !gameWon && event.type == "mouseup") {
+        setMouseDown(false)
+        if (isFirstClick) {
+          setStartTimer(true);
+          // timer();
+          setIsFirstClick(false);
+          //Generate bomb
+          let invalidRow = new Set([curRow, curRow + 1, curRow - 1]);
+          let invalidCol = new Set([curCol, curCol + 1, curCol - 1]);
 
-        let randomRow = getRandomInt(row);
-        let randomCol = getRandomInt(column);
-        let curBombCount = 0;
-        // TODO: first click is ALWAYS BLANK
-        while (curBombCount != bombCount) {
-          if (
-            grid[randomRow][randomCol].status != "BOMB" &&
-            // (randomRow != curRow || randomCol != curCol)
-            !(invalidRow.has(randomRow) && invalidCol.has(randomCol))
-          ) {
-            curBombCount += 1;
-            grid[randomRow][randomCol].status = "BOMB";
-            updateBombCount(randomRow, randomCol);
+          let randomRow = getRandomInt(row);
+          let randomCol = getRandomInt(column);
+          let curBombCount = 0;
+          // TODO: first click is ALWAYS BLANK
+          while (curBombCount != bombCount) {
+            if (
+              grid[randomRow][randomCol].status != "BOMB" &&
+              // (randomRow != curRow || randomCol != curCol)
+              !(invalidRow.has(randomRow) && invalidCol.has(randomCol))
+            ) {
+              curBombCount += 1;
+              grid[randomRow][randomCol].status = "BOMB";
+              updateBombCount(randomRow, randomCol);
+            }
+
+            randomRow = getRandomInt(row);
+            randomCol = getRandomInt(column);
           }
 
-          randomRow = getRandomInt(row);
-          randomCol = getRandomInt(column);
-        }
-
-        // perform BFS here
-        const newGrid = bfs(curRow, curCol, grid, row, column, setTotalGrid);
-        setGrid(newGrid);
-      } else if (grid[curRow][curCol].imgSrc != "FLAG") {
-        // if it's a bomb
-        if (grid[curRow][curCol].status == "BOMB") {
-          setGameOver(true);
-          grid[curRow][curCol].imgSrc = "BOMB";
-          // todo: do more stuff here
-        } else if (grid[curRow][curCol].status == "SQUARE") {
-          if (grid[curRow][curCol].bombCount == 0) {
-            grid[curRow][curCol].imgSrc = "BLANK";
-            // do BFS if it's an empty square
-            const newGrid = bfs(
-              curRow,
-              curCol,
-              grid,
-              row,
-              column,
-              setTotalGrid
-            );
-            setGrid(newGrid);
-          } else {
-            setTotalGrid((totalGrid) => totalGrid - 1);
-            // got a number, change img src
-            grid[curRow][curCol].status =
-              grid[curRow][curCol].bombCount.toString();
-            grid[curRow][curCol].imgSrc =
-              grid[curRow][curCol].bombCount.toString();
+          // perform BFS here
+          const newGrid = bfs(curRow, curCol, grid, row, column, setTotalGrid);
+          setGrid(newGrid);
+        } else if (grid[curRow][curCol].imgSrc != "FLAG") {
+          // if it's a bomb
+          if (grid[curRow][curCol].status == "BOMB") {
+            setGameOver(true);
+            setStartTimer(false);
+            grid[curRow][curCol].imgSrc = "BOMB";
+            // todo: do more stuff here
+          } else if (grid[curRow][curCol].status == "SQUARE") {
+            if (grid[curRow][curCol].bombCount == 0) {
+              grid[curRow][curCol].imgSrc = "BLANK";
+              // do BFS if it's an empty square
+              const newGrid = bfs(
+                curRow,
+                curCol,
+                grid,
+                row,
+                column,
+                setTotalGrid
+              );
+              setGrid(newGrid);
+            } else {
+              setTotalGrid((totalGrid) => totalGrid - 1);
+              // got a number, change img src
+              grid[curRow][curCol].status =
+                grid[curRow][curCol].bombCount.toString();
+              grid[curRow][curCol].imgSrc =
+                grid[curRow][curCol].bombCount.toString();
+            }
           }
         }
+      
       }
+    else if (event.type == "mousedown") {
+      setMouseDown(true)
+      if (grid[curRow][curCol].imgSrc == "SQUARE") 
+      grid[curRow][curCol].imgSrc = "BLANK"
     }
+    else if (event.type == "mouseenter" && mouseDown) {
+      asd ? setAsd(false) : setAsd(true);
+      if (grid[curRow][curCol].imgSrc == "SQUARE")
+        grid[curRow][curCol].imgSrc = "BLANK"
+    }
+    else if (event.type == "mouseout" && mouseDown) {
+      asd ? setAsd(false) : setAsd(true);
+      if (grid[curRow][curCol].imgSrc == "BLANK" 
+      && (grid[curRow][curCol].status == "SQUARE"
+      || grid[curRow][curCol].status == "BOMB"))
+        grid[curRow][curCol].imgSrc = "SQUARE"
+    }
+  }
   };
 
   // handleChange function for Slider
@@ -186,7 +214,7 @@ const Game: React.FC<GameProps> = () => {
   };
 
   return (
-    <div className="flex justify-between pt-[2vh]">
+    <div className="flex justify-between pt-[2vh]  select-none">
       {gameWon ? (
         <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
           <label className="leading-[10vh]">
@@ -241,7 +269,7 @@ const Game: React.FC<GameProps> = () => {
           </button>
         </div>
       </div>
-      <div className="  bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
+      <div className="  bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit select-none">
         {/* Header */}
         <div
           className="flex bg-[#c0c0c0] px-[0.5vw] 
@@ -252,6 +280,7 @@ const Game: React.FC<GameProps> = () => {
           {/* Face  */}
           <Flag flagLeft={bombCount - flag}></Flag>
           <input
+            onDragStart={ (e) => e.preventDefault()}
             type="image"
             onClick={reset}
             src="/images/smile.png"

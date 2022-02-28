@@ -37,10 +37,13 @@ const Square: React.FC<SquareProps> = ({
   return (
     <div
       className="bg-white"
-      onClick={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
       onContextMenu= {(e) => handleRightClick(e, coordinate.row, coordinate.col)}
+      onMouseEnter={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
+      onMouseOut={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
+      onMouseDown={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
+      onMouseUp={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
     >
-      <img style={{ height: rel }} src={src} />
+      <img onDragStart={ (e) => e.preventDefault()} style={{ height: rel }} src={src} />
     </div>
   );
 };

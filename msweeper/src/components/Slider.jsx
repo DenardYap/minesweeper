@@ -17,9 +17,9 @@ const Slider = ({handleChange}) => {
     handleChange(row, col, bomb);
   }
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col justify-around w-[28%]'> 
+    <form onSubmit={handleSubmit} className='flex flex-col justify-around w-[28%] ' > 
       
-      <div className="basis-1/4 flex flex-row text-center items-center justify-center justify-items-center">
+      <div className="basis-1/4 flex flex-row text-center items-center justify-center justify-items-center" >
           <div className="flex flex-col">
 
               <label htmlFor="row-slider">Row</label>
