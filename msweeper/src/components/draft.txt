@@ -74,3 +74,7 @@ THE DOCS!!!
      *      - flagged -> 
      */
  */
+
+ win condition:
+ 1. flag count == bomb count
+ 2. totalgrid == 0

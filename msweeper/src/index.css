@@ -10,11 +10,40 @@
   }
   
 @font-face {
-    font-family: Pangolin;
-    src: url('font/Pangolin-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: Pangolin;
+  src: url('font/Pangolin-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Montserrat-light;
+  src: url('font/Montserrat-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+  
+@font-face {
+  font-family: Montserrat-medium;
+  src: url('font/Montserrat-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+  
+@font-face {
+  font-family: Montserrat-regular;
+  src: url('font/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Montserrat-semibold;
+  src: url('font/Montserrat-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+  
   
 .iteminvisible {
     flex: 0 1 auto;
