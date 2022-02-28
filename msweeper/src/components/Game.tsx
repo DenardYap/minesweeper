@@ -3,11 +3,17 @@
  * 2)
  */
 import React, { useEffect, useState } from "react";
-import { bfs, getGrid, getRandomInt, checkGameWin } from "../utils/gameFunction";
+import {
+  bfs,
+  getGrid,
+  getRandomInt,
+  checkGameWin,
+} from "../utils/gameFunction";
 import Timer from "./Timer";
 import Board from "./Board";
 import Slider from "./Slider";
 import Flag from "./Flag";
+import { Coordinate, SquareObject } from "../types/SquareType";
 export const moves = [
   [0, 1],
   [0, -1],
@@ -39,7 +45,7 @@ const Game: React.FC<GameProps> = () => {
   // total available grid e.g. 10 x 10 and 10 bombs = 90 grids
   const [totalGrid, setTotalGrid] = useState(row * column - bombCount);
   const [asd, setAsd] = useState(false);
-  const [gameWon, setGameWon] = useState(false)
+  const [gameWon, setGameWon] = useState(false);
 
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
@@ -61,7 +67,7 @@ const Game: React.FC<GameProps> = () => {
 
     //disable interval
   }
-  
+
   // function to check and update surrounding
   // images' bombCount
   function updateBombCount(r: number, c: number) {
@@ -74,34 +80,43 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
-  const handleRightClick = (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number ) =>{
+  useEffect(() => {
+    if (checkGameWin(flag, bombCount, totalGrid)) {
+      console.log("win");
+      setGameWon(true);
+    }
+  }, [flag, totalGrid]);
+
+  const handleRightClick = (
+    event: React.MouseEvent<HTMLElement>,
+    curRow: number,
+    curCol: number
+  ) => {
     event.preventDefault(); //prevent the default pop up menu
-    if (!isFirstClick && !gameOver){
+    if (!isFirstClick && !gameOver) {
       if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
         grid[curRow][curCol].imgSrc = "FLAG";
         setFlag((flag) => flag + 1);
-      }
-      else if (grid[curRow][curCol].imgSrc == "FLAG"){
+      } else if (grid[curRow][curCol].imgSrc == "FLAG") {
         grid[curRow][curCol].imgSrc = "SQUARE";
         setFlag((flag) => flag - 1);
       }
-      if (checkGameWin(flag, bombCount, totalGrid)) {
-        console.log("win")
-        setGameWon(true)
-      }
     }
-  }
+  };
   // onClick function for image
-  const handleSquareOnClick = (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number) => {
-    if (!gameOver){
-      
+  const handleSquareOnClick = (
+    event: React.MouseEvent<HTMLElement>,
+    curRow: number,
+    curCol: number
+  ) => {
+    if (!gameOver) {
       if (isFirstClick) {
         setStartTimer(true);
         // timer();
         setIsFirstClick(false);
         //Generate bomb
-        let invalidRow = new Set([curRow, curRow + 1, curRow - 1])
-        let invalidCol = new Set([curCol, curCol + 1, curCol - 1])
+        let invalidRow = new Set([curRow, curRow + 1, curRow - 1]);
+        let invalidCol = new Set([curCol, curCol + 1, curCol - 1]);
 
         let randomRow = getRandomInt(row);
         let randomCol = getRandomInt(column);
@@ -125,39 +140,38 @@ const Game: React.FC<GameProps> = () => {
         // perform BFS here
         const newGrid = bfs(curRow, curCol, grid, row, column, setTotalGrid);
         setGrid(newGrid);
-      } else if (grid[curRow][curCol].imgSrc != "FLAG"){
+      } else if (grid[curRow][curCol].imgSrc != "FLAG") {
         // if it's a bomb
         if (grid[curRow][curCol].status == "BOMB") {
-          // asd ?  setAsd(false) : setAsd(true)
           setGameOver(true);
           grid[curRow][curCol].imgSrc = "BOMB";
           // todo: do more stuff here
         } else if (grid[curRow][curCol].status == "SQUARE") {
           if (grid[curRow][curCol].bombCount == 0) {
-            asd ? setAsd(false) : setAsd(true);
             grid[curRow][curCol].imgSrc = "BLANK";
-            
             // do BFS if it's an empty square
-            const newGrid = bfs(curRow, curCol, grid, row, column, setTotalGrid);
+            const newGrid = bfs(
+              curRow,
+              curCol,
+              grid,
+              row,
+              column,
+              setTotalGrid
+            );
             setGrid(newGrid);
           } else {
-            setTotalGrid((totalGrid) => totalGrid - 1)
+            setTotalGrid((totalGrid) => totalGrid - 1);
             // got a number, change img src
-            // setTotalGrid(totalGrid - 1)
-            asd ? setAsd(false) : setAsd(true);
+            grid[curRow][curCol].status =
+              grid[curRow][curCol].bombCount.toString();
             grid[curRow][curCol].imgSrc =
               grid[curRow][curCol].bombCount.toString();
           }
         }
-        // setGrid(grid);
-      }
-      if (checkGameWin(flag, bombCount, totalGrid)) {
-        console.log("win")
-        setGameWon(true)
       }
     }
   };
-  console.log(totalGrid);
+
   // handleChange function for Slider
   const handleSliderChange = (
     sliderNewRow: string,
@@ -173,11 +187,19 @@ const Game: React.FC<GameProps> = () => {
 
   return (
     <div className="flex justify-between pt-[2vh]">
-      {gameWon ? <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0"> 
-        <label className="leading-[10vh]">Let's be on the leaderboard 😎</label>
-        <input className="shadow-2xl w-[90%] h-[5vh] text-black px-[0.5vw]" type="text" /> 
-      </div> : 
-      ""} 
+      {gameWon ? (
+        <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
+          <label className="leading-[10vh]">
+            Let's be on the leaderboard 😎
+          </label>
+          <input
+            className="shadow-2xl w-[90%] h-[5vh] text-black px-[0.5vw]"
+            type="text"
+          />
+        </div>
+      ) : (
+        ""
+      )}
       {/* {gameWon ? <div>Yeah you won!</div>} : ""*/}
       {/* Sign up and Name */}
       <div className="flex flex-col  w-[30%] ">
@@ -192,7 +214,10 @@ const Game: React.FC<GameProps> = () => {
           />
         </div>
         {/* Content */}
-        <p className="m-[1vw]" style={{ fontFamily: "Montserrat-medium", fontSize: "150%" }}>
+        <p
+          className="m-[1vw]"
+          style={{ fontFamily: "Montserrat-medium", fontSize: "150%" }}
+        >
           <strong> Hello and welcome to msweeper.com!</strong> <br />
           <br />
           Type in your name to be on the Leaderboard! <br />
@@ -226,7 +251,12 @@ const Game: React.FC<GameProps> = () => {
         >
           {/* Face  */}
           <Flag flagLeft={bombCount - flag}></Flag>
-          <input type="image" onClick={reset} src="/images/smile.png" className="m-[0.5vw]" />
+          <input
+            type="image"
+            onClick={reset}
+            src="/images/smile.png"
+            className="m-[0.5vw]"
+          />
 
           <Timer startTimer={startTimer}></Timer>
         </div>

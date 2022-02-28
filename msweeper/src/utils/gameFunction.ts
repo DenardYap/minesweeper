@@ -61,7 +61,7 @@ export const bfs = (
   grid[row][col].status = "BLANK";
   grid[row][col].imgSrc = "BLANK";
 
-  setTotalGrid((totalGrid) => totalGrid - 1)
+  setTotalGrid((totalGrid) => totalGrid - 1);
   while (queue.length !== 0) {
     const coordinate = queue.shift();
     if (!coordinate) {
@@ -76,7 +76,6 @@ export const bfs = (
       grid[r][c].status = grid[r][c].bombCount.toString();
       grid[r][c].imgSrc = grid[r][c].bombCount;
     } else {
-
       for (let i = 0; i < 8; i++) {
         let newR = r + moves[i][0];
         let newC = c + moves[i][1];
@@ -84,7 +83,7 @@ export const bfs = (
         // Make sure it's inside the board
         // Also make sure its status is still SQUARE,
         // meaning that it's not visited
-        /** 0  
+        /** 0
          * X X X 1 0
          * F X X 1 1
          * X X X X X
@@ -98,7 +97,7 @@ export const bfs = (
         ) {
           grid[newR][newC].status = "BLANK";
           grid[newR][newC].imgSrc = "BLANK";
-          setTotalGrid((totalGrid) => totalGrid - 1)
+          setTotalGrid((totalGrid) => totalGrid - 1);
           const newCoordinate: Coordinate = { row: newR, col: newC };
           queue.push(newCoordinate);
         }
@@ -108,9 +107,10 @@ export const bfs = (
   return grid;
 };
 
-export function checkGameWin (currFlagCount: number, totalBomb: number, totalGrid: number) {
-  console.log("flag: ", currFlagCount)
-  console.log("totalBomb: ", totalBomb)
-  console.log("totalGrid: ", totalGrid)
-  return currFlagCount == totalBomb && totalGrid == 0
+export function checkGameWin(
+  currFlagCount: number,
+  totalBomb: number,
+  totalGrid: number
+) {
+  return currFlagCount == totalBomb && totalGrid == 0;
 }
