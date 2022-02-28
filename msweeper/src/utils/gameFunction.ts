@@ -60,14 +60,14 @@ export const bfs = (
   grid[row][col].status = "BLANK";
   grid[row][col].imgSrc = "BLANK";
 
-  while (queue.length != 0) {
+  while (queue.length !== 0) {
     const coordinate = queue.shift();
     if (!coordinate) {
       continue;
     }
     const { row: r, col: c } = coordinate;
 
-    if (grid[r][c].bombCount != 0) {
+    if (grid[r][c].bombCount !== 0) {
       // number from 1 - 8
       // change status and image source
 
@@ -94,7 +94,7 @@ export const bfs = (
           newR < rowSize &&
           newC >= 0 &&
           newC < colSize &&
-          grid[newR][newC].status == "SQUARE"
+          grid[newR][newC].status === "SQUARE"
         ) {
           grid[newR][newC].status = "BLANK";
           grid[newR][newC].imgSrc = "BLANK";

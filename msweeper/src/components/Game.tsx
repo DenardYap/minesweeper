@@ -63,54 +63,72 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
+  const handleRightClick = (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number ) =>{
+    event.preventDefault(); //prevent the default pop up menu
+    if (!gameOver){
+      asd ? setAsd(false) : setAsd(true); // in order to trigger useState, find a better way 
+      if (grid[curRow][curCol].imgSrc == "SQUARE") grid[curRow][curCol].imgSrc = "FLAG";
+      else if (grid[curRow][curCol].imgSrc == "FLAG") grid[curRow][curCol].imgSrc = "SQUARE";
+    }
+  }
   // onClick function for image
-  const handleSquareOnClick = (event: any, curRow: number, curCol: number) => {
-    if (isFirstClick) {
-      setIsFirstClick(false);
-      //Generate bomb
+  const handleSquareOnClick = (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number) => {
+    if (!gameOver){
+      
+      if (isFirstClick) {
+        setIsFirstClick(false);
+        //Generate bomb
+        let invalidRow = new Set([curRow, curRow + 1, curRow - 1])
+        let invalidCol = new Set([curCol, curCol + 1, curCol - 1])
 
-      let randomRow = getRandomInt(row);
-      let randomCol = getRandomInt(column);
-      let curBombCount = 0;
-      // TODO: first click is ALWAYS BLANK
-      while (curBombCount != bomb) {
-        if (
-          grid[randomRow][randomCol].status != "BOMB" &&
-          (randomRow != curRow || randomCol != curCol)
-        ) {
-          curBombCount += 1;
-          grid[randomRow][randomCol].status = "BOMB";
-          updateBombCount(randomRow, randomCol);
+        let randomRow = getRandomInt(row);
+        let randomCol = getRandomInt(column);
+        let curBombCount = 0;
+        // TODO: first click is ALWAYS BLANK
+        while (curBombCount != bomb) {
+          if (
+            grid[randomRow][randomCol].status != "BOMB" &&
+            // (randomRow != curRow || randomCol != curCol)
+            !(invalidRow.has(randomRow) && invalidCol.has(randomCol))
+          ) {
+            curBombCount += 1;
+            grid[randomRow][randomCol].status = "BOMB";
+            updateBombCount(randomRow, randomCol);
+          }
+
+          randomRow = getRandomInt(row);
+          randomCol = getRandomInt(column);
         }
 
-        randomRow = getRandomInt(row);
-        randomCol = getRandomInt(column);
-      }
-
-      // perform BFS here
-      const newGrid = bfs(curRow, curCol, grid, row, column);
-      setGrid(newGrid);
-    } else {
-      // if it's a bomb
-      if (grid[curRow][curCol].status == "BOMB") {
-        // asd ?  setAsd(false) : setAsd(true)
-        setGameOver(true);
-        grid[curRow][curCol].imgSrc = "BOMB";
-        // todo: do more stuff here
-      } else if (grid[curRow][curCol].status == "SQUARE") {
-        if (grid[curRow][curCol].bombCount == 0) {
-          asd ? setAsd(false) : setAsd(true);
-          grid[curRow][curCol].imgSrc = "BLANK";
-          // do BFS
-        } else {
-          // got a number, change img src
-          // setTotalGrid(totalGrid - 1)
-          asd ? setAsd(false) : setAsd(true);
-          grid[curRow][curCol].imgSrc =
-            grid[curRow][curCol].bombCount.toString();
+        // perform BFS here
+        const newGrid = bfs(curRow, curCol, grid, row, column);
+        setGrid(newGrid);
+      } else if (grid[curRow][curCol].imgSrc != "FLAG"){
+        // if it's a bomb
+        if (grid[curRow][curCol].status == "BOMB") {
+          // asd ?  setAsd(false) : setAsd(true)
+          setGameOver(true);
+          grid[curRow][curCol].imgSrc = "BOMB";
+          // todo: do more stuff here
+        } else if (grid[curRow][curCol].status == "SQUARE") {
+          console.log("asdasd")
+          if (grid[curRow][curCol].bombCount == 0) {
+            asd ? setAsd(false) : setAsd(true);
+            grid[curRow][curCol].imgSrc = "BLANK";
+            
+            // do BFS if it's an empty square
+            const newGrid = bfs(curRow, curCol, grid, row, column);
+            setGrid(newGrid);
+          } else {
+            // got a number, change img src
+            // setTotalGrid(totalGrid - 1)
+            asd ? setAsd(false) : setAsd(true);
+            grid[curRow][curCol].imgSrc =
+              grid[curRow][curCol].bombCount.toString();
+          }
         }
+        // setGrid(grid);
       }
-      // setGrid(grid);
     }
   };
 
@@ -128,8 +146,12 @@ const Game: React.FC<GameProps> = () => {
   };
 
   return (
-    
     <div className="flex justify-between pt-[2vh]">
+      {gameOver ? <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0"> 
+        <label className="leading-[10vh]">Let's be on the leaderboard 😎</label>
+        <input className="shadow-2xl w-[90%] h-[5vh] text-black px-[0.5vw]" type="text" /> 
+      </div> : 
+      ""} 
       {/* Sign up and Name */}
       <div className="flex flex-col  w-[30%] ">
         <div className="flex flex-row text-[100%]">
@@ -167,41 +189,6 @@ const Game: React.FC<GameProps> = () => {
           </button>
         </div>
       </div>
-<<<<<<< HEAD:msweeper/src/components/Game.jsx
-      
-        {/* Body */}
-      <div className="bg-[#c2c2c2] p-[1vw] border-solid border-[0.3vw] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit">
-        
-          
-        {/* Header */}  
-        <div 
-        className="flex flex-row bg-[#c0c0c0] px-[0.5vw] 
-        border-solid border-[0.3vw]
-        border-r-white border-b-white 
-        border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between "> 
-        
-        {/* Number 1 */}
-        <div className="m-[0.5vw] flex">
-
-          <img src="/images/0.png"/>
-          <img src="/images/0.png"/>
-          <img src="/images/0.png"/>
-        </div>
-
-        {/* Face  */}
-        <input type="image" src="/images/smile.png" className="m-[0.5vw]"/>
-        
-        {/* Number 2 */}
-        <div className="m-[0.5vw] flex">
-
-          <img src="/images/0.png"/>
-          <img src="/images/0.png"/>
-          <img src="/images/0.png"/>
-        </div>
-        </div>
-        <div className="mt-[2vh] border-[0.3vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b]"> 
-        <Board column={column} row={row} bomb={bomb} squareClickHandler={squareClickHandler} grid={grid} rel={rel}/>
-=======
       <div className="  bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] max-h-fit">
         {/* Header */}
         <div
@@ -228,10 +215,10 @@ const Game: React.FC<GameProps> = () => {
         <div className="mt-[2vh] border-[0.4vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit">
           <Board
             handleSquareOnClick={handleSquareOnClick}
+            handleRightClick={handleRightClick}
             grid={grid}
             rel={rel}
           />
->>>>>>> 65a64539b4aa3ac020651e807b00f212200009ae:msweeper/src/components/Game.tsx
         </div>
       </div>
 
@@ -242,40 +229,3 @@ const Game: React.FC<GameProps> = () => {
 };
 
 export default Game;
-<<<<<<< HEAD:msweeper/src/components/Game.jsx
-=======
-// function make_base() {
-//   let square = new Image();
-//   square.src = "../sprites/square.png";
-//   square.onload = function () {
-//     context.imageSmoothingEnabled = false;
-//     for (let r = 0; r < ROW; r++) {
-//       for (let c = 0; c < COL; c++) {
-//         context.drawImage(square, start_x, start_y, rel_x, rel_y);
-
-//         start_x += rel_x;
-//       }
-//       start_x = 0;
-//       start_y += rel_y;
-//     }
-//   };
-// }
-// make_base();
-
-// for (let i = 0; i <= 500; i++) {
-//   var img = document.createElement("img");
-//   img.src = "../sprites/square.png";
-//   img.width = "30";
-//   block.appendChild(img);
-// }
-
-// import { createBoard } from "./Board";
-
-// const board = createBoard(2, 2, 2);
-
-// board.forEach((row) => {
-//   row.forEach((tile) => {
-//     boardElement.append(tile.element);
-//   });
-// });
->>>>>>> 65a64539b4aa3ac020651e807b00f212200009ae:msweeper/src/components/Game.tsx

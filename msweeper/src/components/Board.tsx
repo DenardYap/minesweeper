@@ -5,12 +5,13 @@ import { Interface } from "readline";
 import { SquareObject } from "../types/SquareType";
 
 interface BoardProps {
-  handleSquareOnClick: (event: any, curRow: number, curCol: number) => void;
+  handleSquareOnClick: (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number) => void;
+  handleRightClick: (event: React.MouseEvent<HTMLElement>, curRow: number, curCol: number) => void;
   grid: SquareObject[][];
   rel: string;
 }
 
-const Board: React.FC<BoardProps> = ({ handleSquareOnClick, grid, rel }) => {
+const Board: React.FC<BoardProps> = ({ handleSquareOnClick, handleRightClick, grid, rel }) => {
   return (
     <div className="flex flex-col">
       {grid.map((squareRow, index) => {
@@ -25,6 +26,7 @@ const Board: React.FC<BoardProps> = ({ handleSquareOnClick, grid, rel }) => {
                   imgSrc={squareObj.imgSrc}
                   rel={rel}
                   handleSquareOnClick={handleSquareOnClick}
+                  handleRightClick={handleRightClick}
                 />
               );
             })}
