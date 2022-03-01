@@ -85,3 +85,49 @@ input[type=range][orient=vertical]
 input[type=range][orient=vertical]:hover{
     opacity: 1;
 }
+.burger-menu-container, .burger-menu-container-open {
+  
+  cursor: pointer;
+}
+.burger-menu {
+  width: 50px;
+  height: 6px;
+  background: white;
+  border-radius : 5px;
+  box-shadow: 0 2px 5px rgba(118, 118, 118, .5);
+  transition: all .4s ease-in-out;
+}
+
+.burger-menu::before, 
+.burger-menu::after {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 6px;
+  background: white;
+  border-radius : 5px;
+  box-shadow: 0 2px 5px rgba(118, 118, 118, .5);
+  transition: all .4s ease-in-out;
+
+}
+
+.burger-menu::before {
+  transform: translateY(-16px);
+}
+.burger-menu::after {
+  transform: translateY(16px);
+}
+
+.burger-menu-container-open .burger-menu {
+  transform: translateX(-50px);
+  background: transparent;
+  box-shadow: none;
+}
+
+.burger-menu-container-open .burger-menu::before {
+  transform: rotate(45deg) translate(35px, -35px);
+}
+
+.burger-menu-container-open .burger-menu::after {
+  transform: rotate(-45deg) translate(35px, 35px);
+}

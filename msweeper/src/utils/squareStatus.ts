@@ -28,3 +28,11 @@ export const timerStatus: Record<number, string> = {
   8: "/images/8.png",
   9: "/images/9.png",
 }
+
+export const faceStatus: Record<string, string> = {
+  smile : "/images/smile.png",
+  smilePressed : "/images/smile_pressed.png",
+  sunglasses : "/images/sunglasses.png",
+  dead : "/images/dead.png",
+  xox : "/images/xox.png"
+}

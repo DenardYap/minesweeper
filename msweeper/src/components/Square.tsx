@@ -36,7 +36,7 @@ const Square: React.FC<SquareProps> = ({
 
   return (
     <div
-      className="bg-white"
+      className="bg-white"  
       onContextMenu= {(e) => handleRightClick(e, coordinate.row, coordinate.col)}
       onMouseEnter={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
       onMouseOut={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}

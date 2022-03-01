@@ -112,5 +112,5 @@ export function checkGameWin(
   totalBomb: number,
   totalGrid: number
 ) {
-  return currFlagCount == totalBomb && totalGrid == 0;
+  return currFlagCount === totalBomb && totalGrid === 0;
 }

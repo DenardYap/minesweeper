@@ -4,28 +4,36 @@ import {useState, useEffect} from 'react';
 import { start } from 'repl';
 interface TimerProps {
   startTimer: boolean
+  gameOver: boolean
+  gameWon: boolean
 }
 
-const Timer: React.FC<TimerProps> = ({startTimer}) => {
-  // 123 mod 10 = 3
-  // 123 mod 100 = 23 / 10 = 2
-  // 123 mod 1000 = 123 / 100 = 1
-  // 9 9
-  // 9 = 0
-  // 
+const Timer: React.FC<TimerProps> = ({startTimer, gameOver, gameWon}) => {
   
   const [time, setTime] = useState(0);
+  let timerInterval : any;
+  console.log("Hello mtfk", gameOver)
   useEffect( () => {
     if (startTimer) {
-      const timerInterval = setInterval( () => {
+      timerInterval = setInterval( () => {
         setTime((time) => time + 1);
         console.log("aSDASD", startTimer)
-        if (!startTimer) {
-          clearInterval(timerInterval);
-        }
+        // if (!startTimer) {
+        //   clearInterval(timerInterval);
+        // }
       }, 1000);   
     }
-  }, [startTimer])
+    
+
+    // useeffect clean up function
+    return () => {
+      clearInterval(timerInterval);
+      console.log("timer reset", gameOver, gameWon)
+      if (!gameWon && !gameOver){
+        setTime(0);
+      }
+    }
+  }, [startTimer, gameWon, gameOver])
 
   return (
     <div className="m-[0.5vw] flex w-fit">
