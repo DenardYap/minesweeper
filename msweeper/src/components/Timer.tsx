@@ -12,19 +12,16 @@ const Timer: React.FC<TimerProps> = ({startTimer, gameOver, gameWon}) => {
   
   const [time, setTime] = useState(0);
   let timerInterval : any;
-  console.log("Hello mtfk", gameOver)
   useEffect( () => {
     if (startTimer) {
       timerInterval = setInterval( () => {
         setTime((time) => time + 1);
-        console.log("aSDASD", startTimer)
         // if (!startTimer) {
         //   clearInterval(timerInterval);
         // }
       }, 1000);   
     }
     
-
     // useeffect clean up function
     return () => {
       clearInterval(timerInterval);
