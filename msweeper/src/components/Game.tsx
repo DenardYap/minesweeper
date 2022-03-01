@@ -5,9 +5,9 @@
 import React, { useEffect, useState } from "react";
 import {
   bfs,
+  checkGameWin,
   getGrid,
   getRandomInt,
-  checkGameWin,
 } from "../utils/gameFunction";
 import Flag from "./Flag";
 import Face from "./Face";
@@ -60,6 +60,10 @@ const Game: React.FC<GameProps> = () => {
 
   // function for handling faceEvent
   function handleFace(event: React.MouseEvent<HTMLElement>) {
+    if (event.type == "mouseleave" && facePressed) {
+      setFacePressed(false);
+    }
+
     if (
       event.type == "mousedown" ||
       (event.type == "mouseenter" && facePressed)
