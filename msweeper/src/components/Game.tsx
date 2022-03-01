@@ -5,19 +5,17 @@
 import React, { useEffect, useState } from "react";
 import {
   bfs,
+  checkGameWin,
   getGrid,
   getRandomInt,
-  checkGameWin,
 } from "../utils/gameFunction";
-import Flag from "./Flag";
-import Face from "./Face";
-import Timer from "./Timer";
-import Board from "./Board";
-import Slider from "./Slider";
-import Hamburger from "./Hamburger";
-import { Coordinate, SquareObject } from "../types/SquareType";
-import { Console } from "console";
 import { faceStatus } from "../utils/squareStatus";
+import Board from "./Board";
+import Face from "./Face";
+import Flag from "./Flag";
+import Slider from "./Slider";
+import Timer from "./Timer";
+
 export const moves = [
   [0, 1],
   [0, -1],
@@ -60,6 +58,10 @@ const Game: React.FC<GameProps> = () => {
 
   // function for handling faceEvent
   function handleFace(event: React.MouseEvent<HTMLElement>) {
+    if (event.type == "mouseleave" && facePressed) {
+      setFacePressed(false);
+    }
+
     if (
       event.type == "mousedown" ||
       (event.type == "mouseenter" && facePressed)
