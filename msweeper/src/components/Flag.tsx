@@ -1,5 +1,5 @@
 import React from 'react'
-import { timerStatus } from '../utils/squareStatus'
+import { timerStatus } from '../utils/statuses'
 
 interface FlagProps  {
   flagLeft: number

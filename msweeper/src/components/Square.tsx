@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Coordinate } from "../types/SquareType";
-import { squareStatus } from "../utils/squareStatus";
+import { squareStatus } from "../utils/statuses";
 
 // var loc = window.location.pathname;
 // var dir = loc.substring(0, loc.lastIndexOf('/'));

@@ -17,7 +17,7 @@ import Slider from "./Slider";
 import Hamburger from "./Hamburger";
 import { Coordinate, SquareObject } from "../types/SquareType";
 import { Console } from "console";
-import { faceStatus } from "../utils/squareStatus";
+import { faceStatus } from "../utils/statuses";
 export const moves = [
   [0, 1],
   [0, -1],
@@ -73,25 +73,17 @@ const Game: React.FC<GameProps> = () => {
       setFaceSrc(faceStatus.smile);
     }
   }
-  // function to adjust the row col and its size
-  useEffect(() => {
-    //remember to reset
-    setGrid(getGrid(row, column));
-    rel = ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
-  }, [column, row, bombCount]);
+  
 
   // function to reset the game
   function reset() {
     setIsFirstClick(true);
     setFlag(0);
-    // setBomb(bombCount);
     setGrid(getGrid(row, column));
     setTotalGrid(row * column - bombCount);
     setGameOver(false);
     setGameWon(false);
     setStartTimer(false);
-
-    //disable interval
   }
 
   // function to check and update surrounding
@@ -106,14 +98,7 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
-  useEffect(() => {
-    if (checkGameWin(flag, bombCount, totalGrid)) {
-      console.log("win");
-      setGameWon(true);
-      setStartTimer(false);
-    }
-  }, [flag, totalGrid]);
-
+  
   const handleRightClick = (
     event: React.MouseEvent<HTMLElement>,
     curRow: number,
@@ -138,14 +123,12 @@ const Game: React.FC<GameProps> = () => {
   ) => {
     // TODO: Make sure mouseup is activate even outside of the element
 
-    if (event.button == 0) {
-      //left click
+    if (event.button == 0) { //left click
       if (!gameOver && !gameWon && event.type == "mouseup") {
         setMouseDown(false);
         setFaceSrc(faceStatus.smile);
         if (isFirstClick) {
           setStartTimer(true);
-          // timer();
           setIsFirstClick(false);
           //Generate bomb
           let invalidRow = new Set([curRow, curRow + 1, curRow - 1]);
@@ -154,11 +137,10 @@ const Game: React.FC<GameProps> = () => {
           let randomRow = getRandomInt(row);
           let randomCol = getRandomInt(column);
           let curBombCount = 0;
-          // TODO: first click is ALWAYS BLANK
           while (curBombCount != bombCount) {
             if (
               grid[randomRow][randomCol].status != "BOMB" &&
-              // (randomRow != curRow || randomCol != curCol)
+              // de morgan's law
               !(invalidRow.has(randomRow) && invalidCol.has(randomCol))
             ) {
               curBombCount += 1;
@@ -173,6 +155,7 @@ const Game: React.FC<GameProps> = () => {
           // perform BFS here
           const newGrid = bfs(curRow, curCol, grid, row, column, setTotalGrid);
           setGrid(newGrid);
+          // r
         } else if (grid[curRow][curCol].imgSrc != "FLAG") {
           // if it's a bomb
           if (grid[curRow][curCol].status == "BOMB") {
@@ -235,10 +218,25 @@ const Game: React.FC<GameProps> = () => {
     setColumn(parseInt(sliderNewCol));
     setRow(parseInt(sliderNewRow));
     setBomb(parseInt(sliderNewBomb));
+    reset()
   };
 
+  useEffect(() => {
+    if (checkGameWin(flag, bombCount, totalGrid)) {
+      setGameWon(true);
+      setStartTimer(false);
+    }
+  }, [flag, totalGrid]);
+
+  // function to adjust the row col and its size
+  useEffect(() => {
+    //remember to reset
+    setGrid(getGrid(row, column));
+    rel = ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
+  }, [column, row, bombCount]);
+
   return (
-    <div className="flex flex-col sm:flex-row justify-between pt-[2vh]  select-none">
+    <div className="flex flex-col sm:flex-row justify-between pt-[2vh] select-none ">
       {gameWon ? (
         <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
           <label className="leading-[10vh]">
@@ -255,7 +253,7 @@ const Game: React.FC<GameProps> = () => {
       )}
       {/* {gameWon ? <div>Yeah you won!</div>} : ""*/}
       {/* Sign up and Name */}
-      <div className="flex flex-row sm:flex-col  w-[100%] sm:w-[30%] justify-start">
+      <div className="flex flex-row sm:flex-col  w-[100%] sm:w-[30%] justify-start mt-[1vh] ">
         <div
           style={{ fontFamily: "Montserrat-medium" }}
           className="flex flex-row  text-[100%]"
@@ -272,7 +270,7 @@ const Game: React.FC<GameProps> = () => {
         {/* Content */}
         <p
           className="ml-[1vw] my-[1vw] mr-[2vw] hidden sm:block"
-          style={{ fontFamily: "Montserrat-medium", fontSize: "150%" }}
+          style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
         >
           <strong> Hello and welcome to msweeper.com!</strong> <br />
           <br />
@@ -284,20 +282,20 @@ const Game: React.FC<GameProps> = () => {
         </p>
         <div className="justify-between hidden sm:flex flex-row ">
           <button
-            className="rounded bg-slate-600 text-slate-100 p-[2vw] m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
-            style={{ fontFamily: "Montserrat-medium", fontSize: "120%" }}
+            className="rounded bg-slate-600 text-slate-100 px-2 py-1 m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
+            style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
           >
             How to Play
           </button>
           <button
-            className="rounded bg-slate-600 text-slate-100 p-[2vw] m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
-            style={{ fontFamily: "Montserrat-medium", fontSize: "120%" }}
+            className="rounded bg-slate-600 text-slate-100 px-2 py-1 m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
+            style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
           >
             How does this website work
           </button>
         </div>
       </div>
-      <div className=" ssm:mx-[4vw] ssm:mt-[1vh] bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit select-none">
+      <div className=" ssm:mx-[1vw] ssm:mt-[1vh] bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit select-none">
         {/* Header */}
         <div
           className="flex bg-[#c0c0c0] px-[0.5vw] 
@@ -327,9 +325,9 @@ const Game: React.FC<GameProps> = () => {
       </div>
 
       {/* Sliders */}
-      <div className="flex justify center m-[5vh]">
+      {/* <div className="flex justify center m-[5vh]"> */}
         {/* <Hamburger></Hamburger> */}
-      </div>
+      {/* </div> */}
       <Slider handleSliderChange={handleSliderChange} />
     </div>
   );

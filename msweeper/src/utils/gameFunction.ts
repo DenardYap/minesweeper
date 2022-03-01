@@ -112,5 +112,6 @@ export function checkGameWin(
   totalBomb: number,
   totalGrid: number
 ) {
+  console.log("currFlagCount, totalBomb, totalGrid", currFlagCount, totalBomb, totalGrid)
   return currFlagCount === totalBomb && totalGrid === 0;
 }

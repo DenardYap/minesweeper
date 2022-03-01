@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { faceStatus } from "../utils/squareStatus";
+import { faceStatus } from "../utils/statuses";
 interface FaceProps {
   reset: any;
   faceSrc: string;

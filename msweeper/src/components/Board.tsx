@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Square from "./Square";
-import { squareStatus } from "../utils/squareStatus";
+import { squareStatus } from "../utils/statuses";
 import { Interface } from "readline";
 import { SquareObject } from "../types/SquareType";
 
