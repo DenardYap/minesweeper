@@ -1,3 +1,3 @@
-let a = 900;
+a = 100.3;
 
-console.log(Math.floor(a / 100));
+console.log(Math.floor(a));

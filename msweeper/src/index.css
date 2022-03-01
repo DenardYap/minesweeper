@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  background-color: rgb(100, 100, 100);
+  color: rgb(233, 233, 233)
+}
 @font-face {
     font-family: PressStart;
     src: url('font/PressStart2P-Regular.ttf') format('truetype');
@@ -44,7 +48,6 @@
   font-style: normal;
 }
   
-  
 .iteminvisible {
     flex: 0 1 auto;
     width: 25vw;
@@ -54,24 +57,27 @@
   
 .row-count, .col-count, .bomb-count {
   transform: rotate(90deg);
+  background-color: transparent;
 }
 
 .sliders {
   transform: rotate(-90deg);
   display: flex;
-  position: relative;
+  width: 95%;
+  position: absolute;
   flex-direction: row;
-  justify-content: center;
+  /* justify-content: flex-end; */
   align-items: center;
+  top: 300%;
 }
 
 #sliders-row {
   
-  left: 50%;
+  left: 40%;
 }
 #sliders-bomb {
   
-  right: 50%;
+  right: 40%;
 }
 
 input[type=range]
@@ -83,7 +89,7 @@ input[type=range]
   background-color: rgba(red, green, blue, 0.4);
   border-radius: 5px;
   border: 2px;
-  border-color: black;
+  border-color: rgb(148 163 184);
   border-style: solid;
   outline: none;
   /* transform: rotate(-90deg);  */
@@ -91,20 +97,31 @@ input[type=range]
 
 input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance: none;
-  background-color: #767676;
+  background-color: rgb(226 232 240);
   height: 5em;
   width: 2em;
   border-radius: 10%;
 }
+
 .burger-menu-container, .burger-menu-container-open {
+  transform: translateY(5vh);
   cursor: pointer;
+  position: relative;
+  height: 1200%;
+  width: 150%;
+  background-color: rgb(188,188,188);
+  border-radius: 5%;
 }
 .burger-menu {
-  width: 50px;
-  height: 6px;
+  width: 3.5vw;
+  height: 0.8vh;
+  position: relative;
+  top: 45%;
+  left: 16%;
   background: white;
   border-radius : 5px;
   box-shadow: 0 2px 5px rgba(118, 118, 118, .5);
+  /* transform: translateX(50px); */
   transition: all .4s ease-in-out;
 }
 
@@ -112,8 +129,8 @@ input[type="range"]::-webkit-slider-thumb{
 .burger-menu::after {
   content: "";
   position: absolute;
-  width: 50px;
-  height: 6px;
+  width: 3.5vw;
+  height: 0.8vh;
   background: white;
   border-radius : 5px;
   box-shadow: 0 2px 5px rgba(118, 118, 118, .5);

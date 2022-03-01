@@ -16,9 +16,9 @@ const Face: React.FC<FaceProps> = ({ reset, faceSrc, handleFace }) => {
       onMouseUp={handleFace}
       onMouseLeave={handleFace}
       onMouseEnter={handleFace}
-      onClick={reset}
+      onClick={(e) => reset()}
       src={faceSrc}
-      className="m-[0.5vw]"
+      className="my-[0.3vw]  h-[5vh]"
     />
   );
 };

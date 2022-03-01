@@ -5,6 +5,7 @@ export const squareStatus: Record<string | number, string> = {
   BLANK: "/images/blank.png",
   BOMB: "/images/bomb.png",
   BOMBX: "/images/bomb_x.png",
+  BOMBRED: "/images/bomb_red.png",
   1: "/images/one.png",
   2: "/images/two.png",
   3: "/images/three.png",

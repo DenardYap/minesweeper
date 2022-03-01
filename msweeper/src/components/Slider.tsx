@@ -13,6 +13,9 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
   const [row, setRow] = useState(10);
   const [col, setCol] = useState(10);
   const [bomb, setBomb] = useState(10);
+  //bomb ratio should be 30% of row * col
+  const [maxBomb, setMaxBomb] = useState(Math.floor(row * col * 0.3))
+  
 
   const changeRow = (e: any) => setRow(e.target.value);
   const changeCol = (e: any) => setCol(e.target.value);
@@ -20,17 +23,27 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    handleSliderChange(row.toString(), col.toString(), bomb.toString());
+    setMaxBomb(Math.floor(row * col * 0.3));
+    if (bomb > Math.floor(row * col * 0.3)) {
+      setBomb(Math.floor(row * col * 0.3))
+      handleSliderChange(row.toString(), col.toString(), Math.floor(row * col * 0.3).toString());
+      
+    }
+    else{
+      
+      handleSliderChange(row.toString(), col.toString(), bomb.toString());
+    }
   };
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col justify-around w-[28vw] mx-[1vw]"
+      className="flex flex-col relative justify-around mx-[1vw] items-center"
+      style={{ fontFamily: "Montserrat-medium" }}
     >
-      <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-row justify-center">
         <div className="sliders" id="sliders-row">
           
-          <div className="row-count " >{row}</div>
+          <div className="row-count" >{row}</div>
               <input
                 type="range"
                 min="10"
@@ -58,7 +71,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
                 // className="-rotate-90"
                 onChange={changeCol}
               />
-            <label htmlFor="col-slider" className="rotate-90">Col</label>
+            <label htmlFor="col-slider" className="rotate-90">Column</label>
 
           </div>
 
@@ -67,8 +80,8 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
               <input
                 type="range"
                 min="10"
-                max="150"
-                defaultValue="10"
+                max= {maxBomb}
+                defaultValue= "10"
                 step="1"
                 id="bomb-slider"
                 name="bomb-slider"
@@ -80,7 +93,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
 
       </div>
       
-      <input  style={{ fontFamily: "Montserrat-medium" }} className="cursor-pointer absolute bottom-[10vh] right-[13vw] bg-slate-600 rounded text-slate-50 p-[1vw] hover:bg-slate-400 hover:border-2 border-black" type="submit" />
+      <input  style={{ fontFamily: "Montserrat-medium" }} className="shadow-md hover:shadow-lg font-bold cursor-pointer w-[40%] relative top-[800%] bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black" type="submit" />
     </form>
   );
 };

@@ -7,14 +7,17 @@ const Hamburger = () => {
     clicked ? setClicked(false) : setClicked(true);
   }
   return (
-      clicked ? 
-      <div className='burger-menu-container-open' onClick={handleClick}>
+    <div className='relative cursor-pointer' onClick={handleClick}> 
+      
+      {clicked ? 
+      <div className='burger-menu-container-open' >
         <div className='burger-menu'></div>
       </div>
       :
-      <div className='burger-menu-container' onClick={handleClick}>
+      <div className='burger-menu-container '>
         <div className='burger-menu'></div>
-      </div>
+      </div>}
+    </div>
   ) 
 }
 

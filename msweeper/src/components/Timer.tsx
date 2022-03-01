@@ -10,7 +10,7 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon }) => {
   const [time, setTime] = useState(0);
-  let timerInterval: any;
+  let timerInterval: ReturnType<typeof setInterval>;
   useEffect(() => {
     if (startTimer) {
       timerInterval = setInterval(() => {
@@ -25,11 +25,11 @@ const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon }) => {
     // useeffect clean up function
     return () => {
       clearInterval(timerInterval);
-    };
+    }; 
   }, [startTimer, gameWon, gameOver]);
 
   return (
-    <div className="m-[0.5vw] flex w-fit">
+    <div className="m-[0.3vw] h-[5vh] flex">
       {/* 000 */}
       <img
         onDragStart={(e) => e.preventDefault()}

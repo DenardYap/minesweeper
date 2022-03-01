@@ -13,10 +13,9 @@ import Flag from "./Flag";
 import Face from "./Face";
 import Timer from "./Timer";
 import Board from "./Board";
-import Slider from "./Slider";
-import Hamburger from "./Hamburger";
-import { Coordinate, SquareObject } from "../types/SquareType";
-import { Console } from "console";
+import LeftBody from "./LeftBody";
+import Leaderboard from "./Leaderboard";
+
 import { faceStatus } from "../utils/statuses";
 export const moves = [
   [0, 1],
@@ -29,7 +28,7 @@ export const moves = [
   [-1, -1],
 ];
 
-const DEFAULT_VIEW_HEIGHT = 80;
+const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
 const DEFAULT_BOMB_COUNT = 10;
@@ -80,11 +79,11 @@ const Game: React.FC<GameProps> = () => {
   
 
   // function to reset the game
-  function reset() {
+  function reset(newRow = row, newColumn = column, newBombCount = bombCount) {
     setIsFirstClick(true);
     setFlag(0);
-    setGrid(getGrid(row, column));
-    setTotalGrid(row * column - bombCount);
+    setGrid(getGrid(newRow, newColumn));
+    setTotalGrid(newRow * newColumn - newBombCount);
     setGameOver(false);
     setGameWon(false);
     setStartTimer(false);
@@ -165,7 +164,8 @@ const Game: React.FC<GameProps> = () => {
           if (grid[curRow][curCol].status == "BOMB") {
             setGameOver(true);
             setStartTimer(false);
-            grid[curRow][curCol].imgSrc = "BOMB";
+            grid[curRow][curCol].imgSrc = "BOMBRED";
+            setFaceSrc(faceStatus.dead);
             // todo: do more stuff here
           } else if (grid[curRow][curCol].status == "SQUARE") {
             if (grid[curRow][curCol].bombCount == 0) {
@@ -190,7 +190,7 @@ const Game: React.FC<GameProps> = () => {
             }
           }
         }
-      } else if (event.type == "mousedown") {
+      } else if (!gameOver && !gameWon && event.type == "mousedown" ) {
         setMouseDown(true);
         if (grid[curRow][curCol].imgSrc == "SQUARE")
           grid[curRow][curCol].imgSrc = "BLANK";
@@ -219,16 +219,20 @@ const Game: React.FC<GameProps> = () => {
   ) => {
     // todo: able to reset same value
     setIsFirstClick(true);
-    setColumn(parseInt(sliderNewCol));
-    setRow(parseInt(sliderNewRow));
-    setBomb(parseInt(sliderNewBomb));
-    reset()
+    const newRow = parseInt(sliderNewRow); 
+    const newColumn = parseInt(sliderNewCol);
+    const newBombCount = parseInt(sliderNewBomb);
+    setRow(newRow);
+    setColumn(newColumn);
+    setBomb(newBombCount);
+    reset(newRow, newColumn, newBombCount);
   };
 
   useEffect(() => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       setGameWon(true);
       setStartTimer(false);
+      setFaceSrc(faceStatus.sunglasses)
     }
   }, [flag, totalGrid]);
 
@@ -240,14 +244,16 @@ const Game: React.FC<GameProps> = () => {
   }, [column, row, bombCount]);
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between pt-[2vh] select-none ">
+    <div className="flex flex-col sm:flex-row justify-between  select-none ">
       {gameWon ? (
-        <div className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
-          <label className="leading-[10vh]">
+        <div style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
+        className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
+          <label className="leading-[10vh] bg-slate-600">
             Let's be on the leaderboard 😎
           </label>
           <input
-            className="shadow-2xl w-[90%] h-[5vh] text-black px-[0.5vw]"
+          placeholder={"your name..."}
+            className="rounded shadow-2xl w-[90%] h-[5vh] px-[0.5vw] bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black placeholder-white "
             type="text"
             autoFocus
           />
@@ -255,60 +261,19 @@ const Game: React.FC<GameProps> = () => {
       ) : (
         ""
       )}
-      {/* {gameWon ? <div>Yeah you won!</div>} : ""*/}
-      {/* Sign up and Name */}
-      <div className="flex flex-row sm:flex-col  w-[100%] sm:w-[30%] justify-start mt-[1vh] ">
-        <div
-          style={{ fontFamily: "Montserrat-medium" }}
-          className="flex flex-row  text-[100%]"
-        >
-          <button className="w-[25vw] mb-[1vh] ssm:w-[25%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] text-[100%] text-center inline-block bg-slate-500 hover:font-bold text-inherit  text-white rounded  shadow-md hover:shadow-lg">
-            Sign up
-          </button>
-          <input
-            placeholder={"your name..."}
-            type="text"
-            className="w-[60vw] sm:w-[80%] h-[6vh] px-[2%] mx-[1.25vw] shadow-md hover:shadow-lg border-2 border-grey-700 rounded"
-          />
-        </div>
-        {/* Content */}
-        <p
-          className="ml-[1vw] my-[1vw] mr-[2vw] hidden sm:block"
-          style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
-        >
-          <strong> Hello and welcome to msweeper.com!</strong> <br />
-          <br />
-          Type in your name to be on the Leaderboard! <br />
-          <br />
-          Sign up for an account to view stats, compete with others, get in game
-          coins and buy different themes! <br />
-          <br />
-        </p>
-        <div className="justify-between hidden sm:flex flex-row ">
-          <button
-            className="rounded bg-slate-600 text-slate-100 px-2 py-1 m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
-            style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
-          >
-            How to Play
-          </button>
-          <button
-            className="rounded bg-slate-600 text-slate-100 px-2 py-1 m-[1.25vw] hover:bg-slate-400 hover:border-2 border-black"
-            style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
-          >
-            How does this website work
-          </button>
-        </div>
-      </div>
-      <div className=" ssm:mx-[1vw] ssm:mt-[1vh] bg-[#c2c2c2] p-[1vw] border-solid border-[0.4vw] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit select-none">
+
+      <LeftBody handleSliderChange={handleSliderChange} ></LeftBody>
+      <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit select-none">
         {/* Header */}
         <div
-          className="flex bg-[#c0c0c0] px-[0.5vw] 
-        border-solid border-[0.4vw]
-        border-r-white border-b-white 
-        border-l-[#7b7b7b] border-t-[#7b7b7b] h-[10vh] justify-between"
+          className="flex bg-[#c0c0c0]  items-center
+        border-solid border-[0.2em] border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
+        h-fit justify-between"
         >
           {/* Face  */}
-          <Flag flagLeft={bombCount - flag}></Flag>
+          <Flag flagLeft={bombCount - flag}
+          ></Flag>
+
           <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
 
           <Timer
@@ -318,7 +283,7 @@ const Game: React.FC<GameProps> = () => {
           ></Timer>
         </div>
         {/* Body */}
-        <div className="mt-[2vh] border-[0.4vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit">
+        <div className="mt-[2vh] border-[0.2em] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit">
           <Board
             handleSquareOnClick={handleSquareOnClick}
             handleRightClick={handleRightClick}
@@ -328,11 +293,7 @@ const Game: React.FC<GameProps> = () => {
         </div>
       </div>
 
-      {/* Sliders */}
-      {/* <div className="flex justify center m-[5vh]"> */}
-        {/* <Hamburger></Hamburger> */}
-      {/* </div> */}
-      <Slider handleSliderChange={handleSliderChange} />
+      <Leaderboard />
     </div>
   );
 };
