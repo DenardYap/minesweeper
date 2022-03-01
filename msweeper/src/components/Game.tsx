@@ -52,34 +52,33 @@ const Game: React.FC<GameProps> = () => {
   const [gameWon, setGameWon] = useState(false);
 
   const [mouseDown, setMouseDown] = useState(false);
-  const [faceSrc, setFaceSrc] = useState(faceStatus.smile)
+  const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
 
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
 
   // function for handling faceEvent
-  function handleFace(event : React.MouseEvent<HTMLElement>) {
-
-    if (event.type == "mousedown" || (event.type == "mouseenter" && facePressed)) {
-      setFacePressed(true)
+  function handleFace(event: React.MouseEvent<HTMLElement>) {
+    if (
+      event.type == "mousedown" ||
+      (event.type == "mouseenter" && facePressed)
+    ) {
+      setFacePressed(true);
       setFaceSrc(faceStatus.smilePressed);
-    }
-    else {
-      
-      if (event.type == "mouseup"){
-        setFacePressed(false)
+    } else {
+      if (event.type == "mouseup") {
+        setFacePressed(false);
       }
       setFaceSrc(faceStatus.smile);
     }
-    
   }
   // function to adjust the row col and its size
   useEffect(() => {
     //remember to reset
     setGrid(getGrid(row, column));
     rel = ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
-  }, [column, row, bombCount]); 
+  }, [column, row, bombCount]);
 
   // function to reset the game
   function reset() {
@@ -114,13 +113,12 @@ const Game: React.FC<GameProps> = () => {
       setStartTimer(false);
     }
   }, [flag, totalGrid]);
-  
+
   const handleRightClick = (
     event: React.MouseEvent<HTMLElement>,
     curRow: number,
     curCol: number
   ) => {
-    
     event.preventDefault(); //prevent the default pop up menu
     if (!isFirstClick && !gameOver && !gameWon) {
       if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
@@ -138,12 +136,13 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-    // TODO: Make sure mouseup is activate even outside of the element 
+    // TODO: Make sure mouseup is activate even outside of the element
 
-    if (event.button == 0) { //left click
+    if (event.button == 0) {
+      //left click
       if (!gameOver && !gameWon && event.type == "mouseup") {
-        setMouseDown(false)
-        setFaceSrc(faceStatus.smile)
+        setMouseDown(false);
+        setFaceSrc(faceStatus.smile);
         if (isFirstClick) {
           setStartTimer(true);
           // timer();
@@ -204,28 +203,25 @@ const Game: React.FC<GameProps> = () => {
             }
           }
         }
-      
+      } else if (event.type == "mousedown") {
+        setMouseDown(true);
+        if (grid[curRow][curCol].imgSrc == "SQUARE")
+          grid[curRow][curCol].imgSrc = "BLANK";
+        setFaceSrc(faceStatus.xox);
+      } else if (event.type == "mouseenter" && mouseDown) {
+        asd ? setAsd(false) : setAsd(true);
+        if (grid[curRow][curCol].imgSrc == "SQUARE")
+          grid[curRow][curCol].imgSrc = "BLANK";
+      } else if (event.type == "mouseout" && mouseDown) {
+        asd ? setAsd(false) : setAsd(true);
+        if (
+          grid[curRow][curCol].imgSrc == "BLANK" &&
+          (grid[curRow][curCol].status == "SQUARE" ||
+            grid[curRow][curCol].status == "BOMB")
+        )
+          grid[curRow][curCol].imgSrc = "SQUARE";
       }
-    else if (event.type == "mousedown") {
-      setMouseDown(true)
-      if (grid[curRow][curCol].imgSrc == "SQUARE") 
-      grid[curRow][curCol].imgSrc = "BLANK"
-      setFaceSrc(faceStatus.xox)
-
     }
-    else if (event.type == "mouseenter" && mouseDown) {
-      asd ? setAsd(false) : setAsd(true);
-      if (grid[curRow][curCol].imgSrc == "SQUARE")
-        grid[curRow][curCol].imgSrc = "BLANK"
-    }
-    else if (event.type == "mouseout" && mouseDown) {
-      asd ? setAsd(false) : setAsd(true);
-      if (grid[curRow][curCol].imgSrc == "BLANK" 
-      && (grid[curRow][curCol].status == "SQUARE"
-      || grid[curRow][curCol].status == "BOMB"))
-        grid[curRow][curCol].imgSrc = "SQUARE"
-    }
-  }
   };
 
   // handleChange function for Slider
@@ -248,7 +244,7 @@ const Game: React.FC<GameProps> = () => {
           <label className="leading-[10vh]">
             Let's be on the leaderboard 😎
           </label>
-          <input 
+          <input
             className="shadow-2xl w-[90%] h-[5vh] text-black px-[0.5vw]"
             type="text"
             autoFocus
@@ -260,11 +256,11 @@ const Game: React.FC<GameProps> = () => {
       {/* {gameWon ? <div>Yeah you won!</div>} : ""*/}
       {/* Sign up and Name */}
       <div className="flex flex-row sm:flex-col  w-[100%] sm:w-[30%] justify-start">
-        <div 
-          style={{ fontFamily: "Montserrat-medium"}}
-          className="flex flex-row  text-[100%]">
-          <button 
-          className="w-[25vw] mb-[1vh] ssm:w-[25%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] text-[100%] text-center inline-block bg-slate-500 hover:font-bold text-inherit  text-white rounded  shadow-md hover:shadow-lg">
+        <div
+          style={{ fontFamily: "Montserrat-medium" }}
+          className="flex flex-row  text-[100%]"
+        >
+          <button className="w-[25vw] mb-[1vh] ssm:w-[25%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] text-[100%] text-center inline-block bg-slate-500 hover:font-bold text-inherit  text-white rounded  shadow-md hover:shadow-lg">
             Sign up
           </button>
           <input
@@ -313,7 +309,11 @@ const Game: React.FC<GameProps> = () => {
           <Flag flagLeft={bombCount - flag}></Flag>
           <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
 
-          <Timer startTimer={startTimer} gameOver={gameOver} gameWon={gameWon}></Timer>
+          <Timer
+            startTimer={startTimer}
+            gameOver={gameOver}
+            gameWon={gameWon}
+          ></Timer>
         </div>
         {/* Body */}
         <div className="mt-[2vh] border-[0.4vw] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit">
@@ -328,7 +328,6 @@ const Game: React.FC<GameProps> = () => {
 
       {/* Sliders */}
       <div className="flex justify center m-[5vh]">
-
         {/* <Hamburger></Hamburger> */}
       </div>
       <Slider handleSliderChange={handleSliderChange} />
