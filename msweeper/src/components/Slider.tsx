@@ -17,8 +17,24 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
   const [maxBomb, setMaxBomb] = useState(Math.floor(row * col * 0.3))
   
 
-  const changeRow = (e: any) => setRow(e.target.value);
-  const changeCol = (e: any) => setCol(e.target.value);
+  const changeRow = (e: any) => {
+    setRow(e.target.value);
+    const cur_max_bomb = Math.floor(e.target.value * col * 0.3);
+    setMaxBomb(cur_max_bomb);
+    if (bomb > cur_max_bomb) {
+      setBomb(cur_max_bomb)
+    }
+  }
+
+  const changeCol = (e: any) => {
+    setCol(e.target.value);
+    
+    const cur_max_bomb = Math.floor(row * e.target.value * 0.3);
+    setMaxBomb(cur_max_bomb);
+    if (bomb > cur_max_bomb) {
+      setBomb(cur_max_bomb)
+    }
+  }
   const changeBomb = (e: any) => setBomb(e.target.value);
 
   const handleSubmit = (e: any) => {

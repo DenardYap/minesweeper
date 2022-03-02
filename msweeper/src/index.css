@@ -78,7 +78,7 @@ input[type=range]
 {
   -webkit-appearance: none;
   height: 7px;
-  width: 20vw;
+  width: 16vw;
   /* position: relative; */
   background-color: rgba(red, green, blue, 0.4);
   border-radius: 5px;
