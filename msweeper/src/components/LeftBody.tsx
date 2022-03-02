@@ -14,7 +14,7 @@ const LeftBody: React.FC<LeftBodyProps> = ({handleSliderChange}) => {
     <div className="flex flex-row mt-[3vh]">
       <button 
       className="shadow-md hover:shadow-lg mx-[1vw] font-bold cursor-pointer bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black"
-      onClick={(e) => handleSliderChange(9, 9, 10)}>
+      onClick={(e) => handleSliderChange(10, 10, 10)}>
         Beginner
         </button>
       <button 

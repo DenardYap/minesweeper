@@ -118,6 +118,7 @@ const Game: React.FC<GameProps> = () => {
       }
     }
   };
+
   // onClick function for image
   const handleSquareOnClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -228,6 +229,7 @@ const Game: React.FC<GameProps> = () => {
     reset(newRow, newColumn, newBombCount);
   };
 
+  //check if game won
   useEffect(() => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       setGameWon(true);
