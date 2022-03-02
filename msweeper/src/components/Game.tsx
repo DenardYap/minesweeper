@@ -53,6 +53,7 @@ const Game: React.FC<GameProps> = () => {
   const [gameWon, setGameWon] = useState(false);
 
   const [mouseDown, setMouseDown] = useState(false);
+  const [mouseUp, setMouseUp] = useState(false);
   const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
 
@@ -60,25 +61,72 @@ const Game: React.FC<GameProps> = () => {
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
 
   // function for handling faceEvent
+  // press -> leave -> up ==> face should remain smile while hover
+  // press -> leave -> back to face ==> face should be pressed
   function handleFace(event: React.MouseEvent<HTMLElement>) {
-    if (event.type == "mouseleave" && facePressed) {
+    if (event.type == "mousedown") {
+      setFaceSrc(faceStatus.smilePressed);
+      setFacePressed(true);
+    }
+
+    if (event.type == "mouseup") {
+      setFaceSrc(faceStatus.smile);
       setFacePressed(false);
     }
 
-    if (
-      event.type == "mousedown" ||
-      (event.type == "mouseenter" && facePressed)
-    ) {
-      setFacePressed(true);
-      setFaceSrc(faceStatus.smilePressed);
-    } else {
-      if (event.type == "mouseup") {
-        setFacePressed(false);
-      }
+    if (event.type == "mouseleave" && facePressed) {
       setFaceSrc(faceStatus.smile);
     }
+
+    if (event.type == "mouseenter" && mouseDown) {
+      setFaceSrc(faceStatus.smilePressed);
+    }
+    // if (event.type == "mouseleave") {
+    //   // setFaceSrc(faceStatus.smile)
+    //   console.log("leave");
+    //   setFacePressed(false);
+    // }
+    // if (
+    //   event.type == "mousedown" ||
+    //   (event.type == "mouseenter" && mouseDown)
+    // ) {
+    //   console.log("ads");
+    //   console.log(facePressed);
+    //   setFacePressed(true);
+    //   setMouseDown(true);
+    //   setFaceSrc(faceStatus.smilePressed);
+    // } else {
+    //   if (event.type == "mouseup") {
+    //     setFacePressed(false);
+    //   }
+    //   setFaceSrc(faceStatus.smile);
+    // }
   }
-  
+
+  const handleMouseUp = () => {
+    setMouseUp(true);
+    setMouseDown(false);
+    setFaceSrc(faceStatus.smile);
+  };
+
+  const handleMouseDown = () => {
+    setMouseDown(true);
+    setMouseUp(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  });
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => {
+      document.removeEventListener("mouseup", handleMouseDown);
+    };
+  });
 
   // function to reset the game
   function reset(newRow = row, newColumn = column, newBombCount = bombCount) {
@@ -103,7 +151,6 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
-  
   const handleRightClick = (
     event: React.MouseEvent<HTMLElement>,
     curRow: number,
@@ -129,7 +176,8 @@ const Game: React.FC<GameProps> = () => {
   ) => {
     // TODO: Make sure mouseup is activate even outside of the element
 
-    if (event.button == 0) { //left click
+    if (event.button == 0) {
+      //left click
       if (!gameOver && !gameWon && event.type == "mouseup") {
         setMouseDown(false);
         setFaceSrc(faceStatus.smile);
@@ -193,7 +241,7 @@ const Game: React.FC<GameProps> = () => {
             }
           }
         }
-      } else if (!gameOver && !gameWon && event.type == "mousedown" ) {
+      } else if (!gameOver && !gameWon && event.type == "mousedown") {
         setMouseDown(true);
         if (grid[curRow][curCol].imgSrc == "SQUARE")
           grid[curRow][curCol].imgSrc = "BLANK";
@@ -222,7 +270,7 @@ const Game: React.FC<GameProps> = () => {
   ) => {
     // todo: able to reset same value
     setIsFirstClick(true);
-    const newRow = parseInt(sliderNewRow); 
+    const newRow = parseInt(sliderNewRow);
     const newColumn = parseInt(sliderNewCol);
     const newBombCount = parseInt(sliderNewBomb);
     setRow(newRow);
@@ -236,7 +284,7 @@ const Game: React.FC<GameProps> = () => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       setGameWon(true);
       setStartTimer(false);
-      setFaceSrc(faceStatus.sunglasses)
+      setFaceSrc(faceStatus.sunglasses);
     }
   }, [flag, totalGrid]);
 
@@ -268,8 +316,7 @@ const Game: React.FC<GameProps> = () => {
         h-fit justify-between"
         >
           {/* Face  */}
-          <Flag flagLeft={bombCount - flag}
-          ></Flag>
+          <Flag flagLeft={bombCount - flag}></Flag>
 
           <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
 
