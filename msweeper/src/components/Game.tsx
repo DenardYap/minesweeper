@@ -15,8 +15,10 @@ import Timer from "./Timer";
 import Board from "./Board";
 import LeftBody from "./LeftBody";
 import Leaderboard from "./Leaderboard";
-
+import WinPopUp from "./WinPopUp";
+import SignUpAndTextMobile from "./SignUpAndTextMobile";
 import { faceStatus } from "../utils/statuses";
+
 export const moves = [
   [0, 1],
   [0, -1],
@@ -246,26 +248,19 @@ const Game: React.FC<GameProps> = () => {
   }, [column, row, bombCount]);
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between  select-none ">
-      {gameWon ? (
-        <div style={{ fontFamily: "Montserrat-medium", fontSize: "100%" }}
-        className="flex flex-col absolute items-center bg-slate-600 m-auto text-center w-[20vw] h-[17.5vh]  text-slate-100 rounded text-[1.2vw] left-0 right-0 top-0 bottom-0">
-          <label className="leading-[10vh] bg-slate-600">
-            Let's be on the leaderboard 😎
-          </label>
-          <input
-          placeholder={"your name..."}
-            className="rounded shadow-2xl w-[90%] h-[5vh] px-[0.5vw] bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black placeholder-white "
-            type="text"
-            autoFocus
-          />
-        </div>
-      ) : (
-        ""
-      )}
+    <div className="flex ssm:flex-col sm:flex-row 
+    justify-between select-none ">
+      {/* Win pop up for name */}
+      <WinPopUp gameWon={gameWon}/>
+
+      {/* Left side of the body */}
 
       <LeftBody handleSliderChange={handleSliderChange} ></LeftBody>
-      <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] h-fit select-none">
+      <SignUpAndTextMobile></SignUpAndTextMobile>
+      {/* Main container for the middle body */}
+      <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
+      border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
+      h-fit select-none sm:order-2 ssm:order-1">
         {/* Header */}
         <div
           className="flex bg-[#c0c0c0]  items-center
@@ -285,7 +280,9 @@ const Game: React.FC<GameProps> = () => {
           ></Timer>
         </div>
         {/* Body */}
-        <div className="mt-[2vh] border-[0.2em] border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] max-h-fit">
+        <div className="mt-[2vh] border-[0.2em] 
+        border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
+        max-h-fit">
           <Board
             handleSquareOnClick={handleSquareOnClick}
             handleRightClick={handleRightClick}

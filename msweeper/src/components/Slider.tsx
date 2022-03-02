@@ -37,11 +37,10 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col relative justify-around mx-[1vw] items-center"
-      style={{ fontFamily: "Montserrat-medium" }}
-    >
-      <div className="flex flex-row justify-center">
-        <div className="sliders" id="sliders-row">
+      className="flex flex-col  sm:relative ssm:order-3 justify-around mx-[1vw] items-center"
+    > 
+      <div className="order-1 ssm:absolue flex flex-row justify-center">
+        <div className=" ssm:relative sm:absolute sm:left-[40%] ssm:top-[10vh] sm:top-[350%] sliders">
           
           <div className="row-count" >{row}</div>
               <input
@@ -58,7 +57,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
             <label htmlFor="row-slider" className="rotate-90">Row</label>
         </div>
           
-        <div className="sliders" id="sliders-col">
+        <div className=" ssm:relative sm:absolute ssm:top-[10vh] sm:top-[350%] sliders">
           <div className="col-count">{col}</div>
               <input
                 type="range"
@@ -75,7 +74,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
 
           </div>
 
-          <div className="sliders" id="sliders-bomb">
+          <div className=" ssm:relative sm:absolute sm:right-[40%] ssm:top-[10vh] sm:top-[350%] sliders">
             <div className="bomb-count">{bomb}</div>
               <input
                 type="range"
@@ -93,7 +92,10 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
 
       </div>
       
-      <input  style={{ fontFamily: "Montserrat-medium" }} className="shadow-md hover:shadow-lg font-bold cursor-pointer w-[40%] relative top-[800%] bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black" type="submit" />
+      <input className="order-2 sm:relative cursor-pointer 
+       bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
+       shadow-button hover:shadow-lg font-bold 
+      sm:top-[800%] ssm:w-[80%] sm:w-[40%] ssm:mt-[22vh] sm:mt-[0vh]" type="submit" />
     </form>
   );
 };
