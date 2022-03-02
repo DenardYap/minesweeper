@@ -306,36 +306,39 @@ const Game: React.FC<GameProps> = () => {
       <LeftBody handleSliderChange={handleSliderChange} ></LeftBody>
       <SignUpAndTextMobile></SignUpAndTextMobile>
       {/* Main container for the middle body */}
-      <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
-      border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
-      h-fit select-none sm:order-2 ssm:order-1">
-        {/* Header */}
-        <div
-          className="flex bg-[#c0c0c0]  items-center
-        border-solid border-[0.2em] border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
-        h-fit justify-between"
-        >
-          {/* Face  */}
-          <Flag flagLeft={bombCount - flag}></Flag>
+      <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1">
+        
+        <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
+        border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
+        ssm:w-fit h-fit select-none ">
+          {/* Header */}
+          <div
+            className="flex bg-[#c0c0c0]  items-center
+          border-solid border-[0.2em] border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
+          h-fit  justify-between"
+          >
+            {/* Face  */}
+            <Flag flagLeft={bombCount - flag}></Flag>
 
-          <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
+            <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
 
-          <Timer
-            startTimer={startTimer}
-            gameOver={gameOver}
-            gameWon={gameWon}
-          ></Timer>
-        </div>
-        {/* Body */}
-        <div className="mt-[2vh] border-[0.2em] 
-        border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
-        max-h-fit">
-          <Board
-            handleSquareOnClick={handleSquareOnClick}
-            handleRightClick={handleRightClick}
-            grid={grid}
-            rel={rel}
-          />
+            <Timer
+              startTimer={startTimer}
+              gameOver={gameOver}
+              gameWon={gameWon}
+            ></Timer>
+          </div>
+          {/* Body */}
+          <div className="mt-[2vh] border-[0.2em] 
+          border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
+          max-h-fit">
+            <Board
+              handleSquareOnClick={handleSquareOnClick}
+              handleRightClick={handleRightClick}
+              grid={grid}
+              rel={rel}
+            />
+          </div>
         </div>
       </div>
 
