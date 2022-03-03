@@ -79,32 +79,11 @@ const Game: React.FC<GameProps> = () => {
     if (event.type == "mouseenter" && mouseDown) {
       setFaceSrc(faceStatus.smilePressed);
     }
-    // if (event.type == "mouseleave") {
-    //   // setFaceSrc(faceStatus.smile)
-    //   console.log("leave");
-    //   setFacePressed(false);
-    // }
-    // if (
-    //   event.type == "mousedown" ||
-    //   (event.type == "mouseenter" && mouseDown)
-    // ) {
-    //   console.log("ads");
-    //   console.log(facePressed);
-    //   setFacePressed(true);
-    //   setMouseDown(true);
-    //   setFaceSrc(faceStatus.smilePressed);
-    // } else {
-    //   if (event.type == "mouseup") {
-    //     setFacePressed(false);
-    //   }
-    //   setFaceSrc(faceStatus.smile);
-    // }
   }
 
   const handleMouseUp = () => {
     setMouseUp(true);
     setMouseDown(false);
-    setFaceSrc(faceStatus.smile);
   };
 
   const handleMouseDown = () => {
@@ -122,9 +101,18 @@ const Game: React.FC<GameProps> = () => {
   useEffect(() => {
     document.addEventListener("mousedown", handleMouseDown);
     return () => {
-      document.removeEventListener("mouseup", handleMouseDown);
+      document.removeEventListener("mousedown", handleMouseDown);
     };
   });
+
+  useEffect(() => {
+    if (gameOver) {
+      setFaceSrc(faceStatus.dead);
+    }
+    if (gameWon) {
+      setFaceSrc(faceStatus.sunglasses);
+    }
+  }, [gameWon, gameOver]);
 
   // function to reset the game
   function reset(newRow = row, newColumn = column, newBombCount = bombCount) {
