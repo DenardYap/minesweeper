@@ -1,7 +1,4 @@
-/**Todo
- * 1) smoothen on other browsers
- * 2)
- */
+
 import React, { useEffect, useState } from "react";
 import {
   bfs,
@@ -164,7 +161,6 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-    // TODO: Make sure mouseup is activate even outside of the element
 
     if (event.button == 0) {
       //left click
@@ -207,7 +203,6 @@ const Game: React.FC<GameProps> = () => {
             setStartTimer(false);
             grid[curRow][curCol].imgSrc = "BOMBRED";
             setFaceSrc(faceStatus.dead);
-            // todo: do more stuff here
           } else if (grid[curRow][curCol].status == "SQUARE") {
             if (grid[curRow][curCol].bombCount == 0) {
               grid[curRow][curCol].imgSrc = "BLANK";
@@ -258,7 +253,6 @@ const Game: React.FC<GameProps> = () => {
     sliderNewCol: string,
     sliderNewBomb: string
   ) => {
-    // todo: able to reset same value
     setIsFirstClick(true);
     const newRow = parseInt(sliderNewRow);
     const newColumn = parseInt(sliderNewCol);
@@ -314,7 +308,7 @@ const Game: React.FC<GameProps> = () => {
 
         data[pos] = {name: curName, timeUsed: winTime};
         if (pos !== 4) updateLeaderboard(winMode, data) 
-        
+
         if (resetOrNot) reset();
   }
 
