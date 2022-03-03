@@ -43,12 +43,27 @@
   font-weight: normal;
   font-style: normal;
 }
-  
-* {
+
+body:not(.footer) { -webkit-touch-callout: none !important; }
+a:not(.footer) { -webkit-user-select: none !important; }
+
+.game {
   font-family: "Montserrat-medium";
   background-color: rgb(100, 100, 100);
   color: rgb(233, 233, 233)
 }
+
+/* .footer {
+  background-color: #e2e8f0 !important;
+  color: rgb(100, 100, 100);
+} */
+
+/* 
+.fix-button {
+  background-color: rgb(233, 233, 233);
+  color: red;
+  
+} */
 .iteminvisible {
     flex: 0 1 auto;
     width: 25vw;

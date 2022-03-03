@@ -354,8 +354,8 @@ const Game: React.FC<GameProps> = () => {
     //gather all the data after won game
   }
   return (
-    <div className="flex ssm:flex-col sm:flex-row 
-    justify-between select-none ">
+    <div className="game flex ssm:flex-col sm:flex-row 
+    justify-between select-none pb-[5vh] ">
       {/* Win pop up for name */}
       <WinPopUp showPopUp={showPopUp} gameWonAftermath={gameWonAftermath}/>
 
@@ -366,7 +366,7 @@ const Game: React.FC<GameProps> = () => {
       {/* Main container for the middle body */}
       <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1">
         
-        <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
+        <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#b3a8a8] p-[1vw] 
         border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
         ssm:w-fit h-fit select-none ">
           {/* Header */}

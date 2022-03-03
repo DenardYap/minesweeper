@@ -1,5 +1,6 @@
 import React from "react";
 import Game from "./components/Game";
+import Footer from "./Footer";
 import "./index.css";
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div >
       
       <Game />
+      <Footer></Footer>
     </div>
   );
 }
