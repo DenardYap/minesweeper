@@ -10,11 +10,11 @@ import Face from "./Face";
 import Timer from "./Timer";
 import Board from "./Board";
 import LeftBody from "./LeftBody";
-import Leaderboard from "./Leaderboard";
+import Leaderboard from "./leaderboard/Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
 import { faceStatus } from "../utils/statuses";
-import { readLeaderboard, updateLeaderboard } from "./databaseFunctions";
+import { readLeaderboard, updateLeaderboard } from "../utils/databaseFunctions";
 
 export const moves = [
   [0, 1],
