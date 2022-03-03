@@ -14,6 +14,7 @@ const SignUpAndTextMobile = () => {
         Sign up
       </button>
       <input
+        id="signup-mobile"
         placeholder={"your name..."}
         type="text"
         className="bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black 

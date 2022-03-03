@@ -1,9 +1,9 @@
 import React from 'react'
 
 const SignUpAndText = () => {
-  return (
-    
-      
+
+
+  return (      
 <>
     <div
       className="sm:flex flex-row  text-[100%] ssm:hidden "
@@ -14,6 +14,7 @@ const SignUpAndText = () => {
         Sign up
       </button>
       <input
+        id="signup"
         maxLength={16}
         placeholder={"your name..."}
         type="text"

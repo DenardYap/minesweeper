@@ -1,7 +1,4 @@
-/**Todo
- * 1) smoothen on other browsers
- * 2)
- */
+
 import React, { useEffect, useState } from "react";
 import {
   bfs,
@@ -18,6 +15,7 @@ import Leaderboard from "./Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
 import { faceStatus } from "../utils/statuses";
+import {readLeaderboard, updateLeaderboard} from "./databaseFunctions"
 
 export const moves = [
   [0, 1],
@@ -30,12 +28,16 @@ export const moves = [
   [-1, -1],
 ];
 
+let winTime = 0;
+let winName = "";
+let winMode = "easy";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
 const DEFAULT_BOMB_COUNT = 10;
 
 interface GameProps {}
+
 
 const Game: React.FC<GameProps> = () => {
   const [column, setColumn] = useState(DEFAULT_COL);
@@ -51,11 +53,13 @@ const Game: React.FC<GameProps> = () => {
   const [totalGrid, setTotalGrid] = useState(row * column - bombCount);
   const [asd, setAsd] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseUp, setMouseUp] = useState(false);
   const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
+
 
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
@@ -81,11 +85,14 @@ const Game: React.FC<GameProps> = () => {
     if (event.type == "mouseenter" && mouseDown) {
       setFaceSrc(faceStatus.smilePressed);
     }
+    
   }
 
   const handleMouseUp = () => {
     setMouseUp(true);
     setMouseDown(false);
+    
+    setFaceSrc(faceStatus.smile);
   };
 
   const handleMouseDown = () => {
@@ -103,18 +110,9 @@ const Game: React.FC<GameProps> = () => {
   useEffect(() => {
     document.addEventListener("mousedown", handleMouseDown);
     return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseDown);
     };
   });
-
-  useEffect(() => {
-    if (gameOver) {
-      setFaceSrc(faceStatus.dead);
-    }
-    if (gameWon) {
-      setFaceSrc(faceStatus.sunglasses);
-    }
-  }, [gameWon, gameOver]);
 
   // function to reset the game
   function reset(newRow = row, newColumn = column, newBombCount = bombCount) {
@@ -125,6 +123,7 @@ const Game: React.FC<GameProps> = () => {
     setGameOver(false);
     setGameWon(false);
     setStartTimer(false);
+    setShowPopUp(false);
   }
 
   // function to check and update surrounding
@@ -162,7 +161,6 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-    // TODO: Make sure mouseup is activate even outside of the element
 
     if (event.button == 0) {
       //left click
@@ -205,7 +203,6 @@ const Game: React.FC<GameProps> = () => {
             setStartTimer(false);
             grid[curRow][curCol].imgSrc = "BOMBRED";
             setFaceSrc(faceStatus.dead);
-            // todo: do more stuff here
           } else if (grid[curRow][curCol].status == "SQUARE") {
             if (grid[curRow][curCol].bombCount == 0) {
               grid[curRow][curCol].imgSrc = "BLANK";
@@ -256,7 +253,6 @@ const Game: React.FC<GameProps> = () => {
     sliderNewCol: string,
     sliderNewBomb: string
   ) => {
-    // todo: able to reset same value
     setIsFirstClick(true);
     const newRow = parseInt(sliderNewRow);
     const newColumn = parseInt(sliderNewCol);
@@ -267,12 +263,69 @@ const Game: React.FC<GameProps> = () => {
     reset(newRow, newColumn, newBombCount);
   };
 
+  function getMode() {
+    const area = row * column;
+    const bombRatio = bombCount / area; 
+    
+    // calculate the mode
+    // more testing
+    if (area < 256) winMode = "easy"
+    else if (area < 484) {
+      
+      if (bombRatio <= 0.15625) winMode = "easy"
+      else winMode = "medium"
+    }
+    else {
+      if (bombRatio <= 0.1) winMode = "easy"
+      else if (bombRatio <= 0.15625) winMode = "medium"
+      else winMode = "hard"
+    }
+  }
   //check if game won
+
+  async function gameWonAftermath(curName : string, resetOrNot = false) {
+
+        // name and timer is now gathered, update the data
+        getMode() //initialize mode to winMode 
+
+        // then do the leaderboard calculation here
+        // todo: cache the data
+        const cur_leaderboard : any = await readLeaderboard(winMode);
+        
+        // updateLeaderboard(winMode, )
+        let pos = 4; 
+        let last_diff = 1000;
+        Object.keys(cur_leaderboard).forEach((key) => {
+          console.log(cur_leaderboard[key].timeUsed)
+          if (winTime < cur_leaderboard[key].timeUsed && last_diff > cur_leaderboard[key].timeUsed - winTime) {
+            last_diff = cur_leaderboard[key].timeUsed - winTime;
+            pos = parseInt(key);
+          }
+        });
+          
+        let data : any = {};
+        // todo: push every lower index one index lower 
+
+        data[pos] = {name: curName, timeUsed: winTime};
+        if (pos !== 4) updateLeaderboard(winMode, data) 
+
+        if (resetOrNot) reset();
+  }
+
   useEffect(() => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       setGameWon(true);
       setStartTimer(false);
       setFaceSrc(faceStatus.sunglasses);
+      // if the default name is not keyed in,  
+      // we pop up 
+      (async function() {
+        winName = gatherDefaultData();
+        if (!winName) setShowPopUp(true);
+        else {
+          gameWonAftermath(winName);
+        }
+      })();
     }
   }, [flag, totalGrid]);
 
@@ -283,25 +336,39 @@ const Game: React.FC<GameProps> = () => {
     rel = ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
   }, [column, row, bombCount]);
 
+  function setWinTime(time : number) {
+    winTime = time;
+  }
+
+  function gatherDefaultData() {
+
+    let name : any;
+    //if small screen, we get signup mobile instead of signup
+    if (window.innerWidth < 640) name = document.getElementById("signup-mobile") 
+    else name = document.getElementById("signup") 
+    
+    //if the default name is empty, we return false
+    if (name.value.length === 0) return false
+    else return name.value
+
+    //gather all the data after won game
+  }
   return (
-    <div
-      className="flex ssm:flex-col sm:flex-row 
-    justify-between select-none "
-    >
+    <div className="flex ssm:flex-col sm:flex-row 
+    justify-between select-none ">
       {/* Win pop up for name */}
-      <WinPopUp gameWon={gameWon} />
+      <WinPopUp showPopUp={showPopUp} gameWonAftermath={gameWonAftermath}/>
 
       {/* Left side of the body */}
 
-      <LeftBody handleSliderChange={handleSliderChange}></LeftBody>
+      <LeftBody handleSliderChange={handleSliderChange} ></LeftBody>
       <SignUpAndTextMobile></SignUpAndTextMobile>
       {/* Main container for the middle body */}
       <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1">
-        <div
-          className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
+        
+        <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#c2c2c2] p-[1vw] 
         border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
-        ssm:w-fit h-fit select-none "
-        >
+        ssm:w-fit h-fit select-none ">
           {/* Header */}
           <div
             className="flex bg-[#c0c0c0]  items-center
@@ -311,24 +378,19 @@ const Game: React.FC<GameProps> = () => {
             {/* Face  */}
             <Flag flagLeft={bombCount - flag}></Flag>
 
-            <Face
-              reset={reset}
-              faceSrc={faceSrc}
-              handleFace={handleFace}
-            ></Face>
+            <Face reset={reset} faceSrc={faceSrc} handleFace={handleFace}></Face>
 
             <Timer
               startTimer={startTimer}
               gameOver={gameOver}
               gameWon={gameWon}
+              setWinTime={setWinTime}
             ></Timer>
           </div>
           {/* Body */}
-          <div
-            className="mt-[2vh] border-[0.2em] 
+          <div className="mt-[2vh] border-[0.2em] 
           border-solid border-r-white border-b-white border-l-[#7b7b7b] border-t-[#7b7b7b] 
-          max-h-fit"
-          >
+          max-h-fit">
             <Board
               handleSquareOnClick={handleSquareOnClick}
               handleRightClick={handleRightClick}

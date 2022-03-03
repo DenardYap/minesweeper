@@ -20,4 +20,6 @@ async function updateLeaderboard(mode : string, data : object) {
 
 }
 
+
+
 export {readLeaderboard, updateLeaderboard}
