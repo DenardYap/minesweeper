@@ -34,14 +34,17 @@ const Square: React.FC<SquareProps> = ({
     setSrc(squareStatus[imgSrc]);
   }, [imgSrc]);
 
+  let hFunc = (e : React.MouseEvent<HTMLElement>) => {
+    handleSquareOnClick(e, coordinate.row, coordinate.col);
+  }
   return (
     <div
       className="bg-white"  
       onContextMenu= {(e) => handleRightClick(e, coordinate.row, coordinate.col)}
-      onMouseEnter={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
-      onMouseOut={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
-      onMouseDown={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
-      onMouseUp={(e) => handleSquareOnClick(e, coordinate.row, coordinate.col)}
+      onMouseEnter={hFunc}
+      onMouseOut={hFunc}
+      onMouseDown={hFunc}
+      onMouseUp={hFunc}
     >
       <img onDragStart={ (e) => e.preventDefault()} style={{ height: rel }} src={src} />
     </div>

@@ -30,18 +30,17 @@ const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon }) => {
 
   return (
     <div className="m-[0.3vw] h-[5vh] flex">
-      {/* 000 */}
       <img
         onDragStart={(e) => e.preventDefault()}
-        src={timerStatus[Math.floor((time % 1000) / 100)]}
+        src={timerStatus[time > 999 ? 9 : Math.floor((time % 1000) / 100)]}
       />
       <img
         onDragStart={(e) => e.preventDefault()}
-        src={timerStatus[Math.floor((time % 100) / 10)]}
+        src={timerStatus[time > 999 ? 9 : Math.floor((time % 100) / 10)]}
       />
       <img
         onDragStart={(e) => e.preventDefault()}
-        src={timerStatus[time % 10]}
+        src={timerStatus[time > 999 ? 9 : time % 10]}
       />
     </div>
   );

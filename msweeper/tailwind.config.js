@@ -18,6 +18,11 @@ module.exports = {
       "2xl": "1536px",
       // => @media (min-width: 1536px) { ... }
     },
+    extend: {
+      boxShadow: {
+        button: "0px 4px 10px -1px rgba(255, 255, 255, 0.3)",
+      },
+    },
   },
   plugins: [],
 };
