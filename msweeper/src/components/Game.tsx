@@ -18,6 +18,7 @@ import Leaderboard from "./Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
 import { faceStatus } from "../utils/statuses";
+import {readLeaderboard, updateLeaderboard} from "./databaseFunctions"
 
 export const moves = [
   [0, 1],
@@ -30,12 +31,16 @@ export const moves = [
   [-1, -1],
 ];
 
+let winTime = 0;
+let winName = "";
+let winMode = "easy";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
 const DEFAULT_BOMB_COUNT = 10;
 
 interface GameProps {}
+
 
 const Game: React.FC<GameProps> = () => {
   const [column, setColumn] = useState(DEFAULT_COL);
@@ -51,11 +56,13 @@ const Game: React.FC<GameProps> = () => {
   const [totalGrid, setTotalGrid] = useState(row * column - bombCount);
   const [asd, setAsd] = useState(false);
   const [gameWon, setGameWon] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseUp, setMouseUp] = useState(false);
   const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
+
 
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
@@ -119,6 +126,7 @@ const Game: React.FC<GameProps> = () => {
     setGameOver(false);
     setGameWon(false);
     setStartTimer(false);
+    setShowPopUp(false);
   }
 
   // function to check and update surrounding
@@ -261,12 +269,69 @@ const Game: React.FC<GameProps> = () => {
     reset(newRow, newColumn, newBombCount);
   };
 
+  function getMode() {
+    const area = row * column;
+    const bombRatio = bombCount / area; 
+    
+    // calculate the mode
+    // more testing
+    if (area < 256) winMode = "easy"
+    else if (area < 484) {
+      
+      if (bombRatio <= 0.15625) winMode = "easy"
+      else winMode = "medium"
+    }
+    else {
+      if (bombRatio <= 0.1) winMode = "easy"
+      else if (bombRatio <= 0.15625) winMode = "medium"
+      else winMode = "hard"
+    }
+  }
   //check if game won
+
+  async function gameWonAftermath(curName : string, resetOrNot = false) {
+
+        // name and timer is now gathered, update the data
+        getMode() //initialize mode to winMode 
+
+        // then do the leaderboard calculation here
+        // todo: cache the data
+        const cur_leaderboard : any = await readLeaderboard(winMode);
+        
+        // updateLeaderboard(winMode, )
+        let pos = 4; 
+        let last_diff = 1000;
+        Object.keys(cur_leaderboard).forEach((key) => {
+          console.log(cur_leaderboard[key].timeUsed)
+          if (winTime < cur_leaderboard[key].timeUsed && last_diff > cur_leaderboard[key].timeUsed - winTime) {
+            last_diff = cur_leaderboard[key].timeUsed - winTime;
+            pos = parseInt(key);
+          }
+        });
+          
+        let data : any = {};
+        // todo: push every lower index one index lower 
+
+        data[pos] = {name: curName, timeUsed: winTime};
+        if (pos !== 4) updateLeaderboard(winMode, data) 
+        
+        if (resetOrNot) reset();
+  }
+
   useEffect(() => {
     if (checkGameWin(flag, bombCount, totalGrid)) {
       setGameWon(true);
       setStartTimer(false);
       setFaceSrc(faceStatus.sunglasses);
+      // if the default name is not keyed in,  
+      // we pop up 
+      (async function() {
+        winName = gatherDefaultData();
+        if (!winName) setShowPopUp(true);
+        else {
+          gameWonAftermath(winName);
+        }
+      })();
     }
   }, [flag, totalGrid]);
 
@@ -277,11 +342,28 @@ const Game: React.FC<GameProps> = () => {
     rel = ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
   }, [column, row, bombCount]);
 
+  function setWinTime(time : number) {
+    winTime = time;
+  }
+
+  function gatherDefaultData() {
+
+    let name : any;
+    //if small screen, we get signup mobile instead of signup
+    if (window.innerWidth < 640) name = document.getElementById("signup-mobile") 
+    else name = document.getElementById("signup") 
+    
+    //if the default name is empty, we return false
+    if (name.value.length === 0) return false
+    else return name.value
+
+    //gather all the data after won game
+  }
   return (
     <div className="flex ssm:flex-col sm:flex-row 
     justify-between select-none ">
       {/* Win pop up for name */}
-      <WinPopUp gameWon={gameWon}/>
+      <WinPopUp showPopUp={showPopUp} gameWonAftermath={gameWonAftermath}/>
 
       {/* Left side of the body */}
 
@@ -308,6 +390,7 @@ const Game: React.FC<GameProps> = () => {
               startTimer={startTimer}
               gameOver={gameOver}
               gameWon={gameWon}
+              setWinTime={setWinTime}
             ></Timer>
           </div>
           {/* Body */}

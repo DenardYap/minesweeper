@@ -6,9 +6,10 @@ interface TimerProps {
   startTimer: boolean;
   gameOver: boolean;
   gameWon: boolean;
+  setWinTime : any;
 }
 
-const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon }) => {
+const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon, setWinTime }) => {
   const [time, setTime] = useState(0);
   let timerInterval: ReturnType<typeof setInterval>;
   useEffect(() => {
@@ -20,6 +21,7 @@ const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon }) => {
       if (!gameWon && !gameOver) {
         setTime(0);
       }
+      if (gameWon) setWinTime(time);
     }
 
     // useeffect clean up function
