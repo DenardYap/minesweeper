@@ -14,6 +14,7 @@ const SignUpAndText = () => {
         Sign up
       </button>
       <input
+        maxLength={16}
         placeholder={"your name..."}
         type="text"
         className="bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black 

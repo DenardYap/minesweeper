@@ -1,3 +1,3 @@
-a = 100.3;
+let a = {};
 
-console.log(Math.floor(a));
+console.log(Object.keys(a).length);

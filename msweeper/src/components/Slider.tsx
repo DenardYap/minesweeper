@@ -70,7 +70,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
                 // className="-rotate-90"
                 onChange={changeRow}
               />
-            <label htmlFor="row-slider" className="rotate-90">Row</label>
+            <label htmlFor="row-slider" className="bg-transparent rotate-90">Row</label>
         </div>
           
         <div className=" ssm:relative sm:absolute ssm:top-[10vh] sm:top-[350%] sliders">
@@ -86,7 +86,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
                 // className="-rotate-90"
                 onChange={changeCol}
               />
-            <label htmlFor="col-slider" className="rotate-90">Column</label>
+            <label htmlFor="col-slider" className="bg-transparent rotate-90">Column</label>
 
           </div>
 
@@ -103,7 +103,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
                 // className="-rotate-90"
                 onChange={changeBomb}
               />
-            <label htmlFor="bomb-slider" className="rotate-90">Bomb</label>
+            <label htmlFor="bomb-slider" className="bg-transparent rotate-90">Bomb</label>
           </div>
 
       </div>

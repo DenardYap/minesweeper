@@ -12,14 +12,14 @@ const DifficultyButtons : React.FC<DifficultyButtonsProps> = ({handleSliderChang
         font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
         mx-[1vw] ssm:py-[2vh]"
         onClick={(e) => handleSliderChange(10, 10, 10)}>
-        Beginner
+        Easy
         </button>
         <button 
         className="basis-3/12 cursor-pointer shadow-button hover:shadow-lg
         font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
         mx-[1vw] ssm:py-[2vh] "
         onClick={(e) => handleSliderChange(16, 16, 40)}>
-        Intermediate
+        Medium
         </button>
         <button 
         className="basis-3/12 cursor-pointer shadow-button hover:shadow-lg

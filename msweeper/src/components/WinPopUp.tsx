@@ -16,6 +16,7 @@ const WinPopUp: React.FC<WinPopUpProps> = ({gameWon}) => {
             Let's be on the leaderboard 😎
         </label>
         <input
+        maxLength={16}
         placeholder={"your name..."}
             className="rounded shadow-2xl w-[90%] h-[5vh] sm:px-[0.5vw] ssm:px-[2vw] bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black placeholder-white "
             type="text"

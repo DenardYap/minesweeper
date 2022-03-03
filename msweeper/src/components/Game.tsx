@@ -81,31 +81,13 @@ const Game: React.FC<GameProps> = () => {
     if (event.type == "mouseenter" && mouseDown) {
       setFaceSrc(faceStatus.smilePressed);
     }
-    // if (event.type == "mouseleave") {
-    //   // setFaceSrc(faceStatus.smile)
-    //   console.log("leave");
-    //   setFacePressed(false);
-    // }
-    // if (
-    //   event.type == "mousedown" ||
-    //   (event.type == "mouseenter" && mouseDown)
-    // ) {
-    //   console.log("ads");
-    //   console.log(facePressed);
-    //   setFacePressed(true);
-    //   setMouseDown(true);
-    //   setFaceSrc(faceStatus.smilePressed);
-    // } else {
-    //   if (event.type == "mouseup") {
-    //     setFacePressed(false);
-    //   }
-    //   setFaceSrc(faceStatus.smile);
-    // }
+    
   }
 
   const handleMouseUp = () => {
     setMouseUp(true);
     setMouseDown(false);
+    
     setFaceSrc(faceStatus.smile);
   };
 

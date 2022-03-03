@@ -61,9 +61,6 @@
   background-color: transparent;
 }
 
-.asdzxc {
-  background-color: black;
-}
 .sliders {
   transform: rotate(-90deg);
   display: flex;
@@ -72,6 +69,7 @@
   flex-direction: row;
   align-items: center;
   top: 350%;
+  background-color: transparent;
 }
 
 input[type=range]
