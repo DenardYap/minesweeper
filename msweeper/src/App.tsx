@@ -6,7 +6,7 @@ import "./index.css";
 function App() {
   return (
     <div >
-      
+        
       <Game />
       <Footer></Footer>
     </div>

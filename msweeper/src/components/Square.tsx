@@ -47,7 +47,6 @@ const Square: React.FC<SquareProps> = ({
     if (isBrowser) handleRightClick(e, coordinate.row, coordinate.col)
   }
 
-  //TODO: might need to cancel if touchmove?
   //TODO: add adding animation
   //TODO: add shaking effect 
   const handleButtonPress = (e : any) => {
