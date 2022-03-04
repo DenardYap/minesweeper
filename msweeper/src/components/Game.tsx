@@ -290,7 +290,7 @@ const Game: React.FC<GameProps> = () => {
     const cur_leaderboard: any = await readLeaderboard(winMode);
 
     // updateLeaderboard(winMode, )
-    let pos = 4;
+    let pos = 5;
     let last_diff = 1000;
     Object.keys(cur_leaderboard).forEach((key) => {
       console.log(cur_leaderboard[key].timeUsed);
