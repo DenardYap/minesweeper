@@ -40,7 +40,7 @@ let winName = "";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
-const DEFAULT_BOMB_COUNT = 0;
+const DEFAULT_BOMB_COUNT = 10;
 
 interface GameProps {}
 
