@@ -4,7 +4,6 @@ import {
   getLeaderBoard,
   LeaderboardData,
   readLeaderboard,
-  updateLeaderboard,
 } from "../../utils/databaseFunctions";
 import LeaderboardItem from "./LeaderboardData";
 interface LeaderboardProps {}

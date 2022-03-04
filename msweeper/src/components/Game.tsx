@@ -14,8 +14,14 @@ import Leaderboard from "./leaderboard/Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
 import { faceStatus } from "../utils/statuses";
-import { readLeaderboard, updateLeaderboard } from "../utils/databaseFunctions";
-import {isMobile, isBrowser} from 'react-device-detect';
+import {
+  getLeaderBoard,
+  LeaderboardData,
+  Rank,
+  readLeaderboard,
+  updateLeaderboard,
+} from "../utils/databaseFunctions";
+import { isMobile, isBrowser } from "react-device-detect";
 
 export const moves = [
   [0, 1],
@@ -28,13 +34,13 @@ export const moves = [
   [-1, -1],
 ];
 
-let winTime = 0;
+let winTime = 999;
 let winName = "";
-let winMode = "easy";
+// let winMode = "easy";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
-const DEFAULT_BOMB_COUNT = 10;
+const DEFAULT_BOMB_COUNT = 0;
 
 interface GameProps {}
 
@@ -139,11 +145,7 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
-  const handleRightClick = (
-    event: any,
-    curRow: number,
-    curCol: number
-  ) => {
+  const handleRightClick = (event: any, curRow: number, curCol: number) => {
     event.preventDefault(); //prevent the default pop up menu
     if (!isFirstClick && !gameOver && !gameWon) {
       if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
@@ -226,7 +228,7 @@ const Game: React.FC<GameProps> = () => {
             }
           }
         }
-      } else if (!gameOver && !gameWon && event.type == "mousedown" ) {
+      } else if (!gameOver && !gameWon && event.type == "mousedown") {
         setMouseDown(true);
         if (grid[curRow][curCol].imgSrc == "SQUARE")
           grid[curRow][curCol].imgSrc = "BLANK";
@@ -266,9 +268,9 @@ const Game: React.FC<GameProps> = () => {
   function getMode() {
     const area = row * column;
     const bombRatio = bombCount / area;
+    let winMode: string;
 
-    // calculate the mode
-    // more testing
+    // TO TEST
     if (area < 256) winMode = "easy";
     else if (area < 484) {
       if (bombRatio <= 0.15625) winMode = "easy";
@@ -278,37 +280,43 @@ const Game: React.FC<GameProps> = () => {
       else if (bombRatio <= 0.15625) winMode = "medium";
       else winMode = "hard";
     }
+
+    return winMode;
   }
   //check if game won
 
   async function gameWonAftermath(curName: string, resetOrNot = false) {
     // name and timer is now gathered, update the data
-    getMode(); //initialize mode to winMode
+    const winMode = getMode(); //initialize mode to winMode
+    console.log("mode: ", winMode);
 
     // then do the leaderboard calculation here
     // todo: cache the data
-    const cur_leaderboard: any = await readLeaderboard(winMode);
+    // const cur_leaderboard: any = await readLeaderboard(winMode);
+    const currentLeaderboard = await getLeaderBoard();
 
-    // updateLeaderboard(winMode, )
-    let pos = 5;
-    let last_diff = 1000;
-    Object.keys(cur_leaderboard).forEach((key) => {
-      console.log(cur_leaderboard[key].timeUsed);
-      if (
-        winTime < cur_leaderboard[key].timeUsed &&
-        last_diff > cur_leaderboard[key].timeUsed - winTime
-      ) {
-        last_diff = cur_leaderboard[key].timeUsed - winTime;
-        pos = parseInt(key);
+    const currModeLeaderboard = currentLeaderboard.find(
+      (leaderboard) => leaderboard.mode === winMode
+    );
+
+    // 2, 3, 4, 4, 5
+    let i: number = 0;
+    while (i < 5) {
+      if (winTime < currModeLeaderboard!.rank[i].timeUsed) {
+        const newRank: Rank = {
+          name: curName,
+          timeUsed: winTime,
+        };
+        currModeLeaderboard!.rank.splice(i, 0, newRank);
+        currModeLeaderboard!.rank.pop();
+        await updateLeaderboard(winMode, { rank: currModeLeaderboard!.rank });
+        break;
       }
-    });
+      i++;
+    }
 
-    let data: any = {};
+    // let data: any = {};
     // todo: push every lower index one index lower
-
-    data[pos] = { name: curName, timeUsed: winTime };
-    if (pos !== 4) updateLeaderboard(winMode, data);
-
     if (resetOrNot) reset();
   }
 
@@ -354,8 +362,10 @@ const Game: React.FC<GameProps> = () => {
     //gather all the data after won game
   }
   return (
-    <div className="game flex ssm:flex-col sm:flex-row 
-    justify-between select-none pb-[5vh] ">
+    <div
+      className="game flex ssm:flex-col sm:flex-row 
+    justify-between select-none pb-[5vh] "
+    >
       {/* Win pop up for name */}
       <WinPopUp showPopUp={showPopUp} gameWonAftermath={gameWonAftermath} />
 
@@ -365,8 +375,8 @@ const Game: React.FC<GameProps> = () => {
       <SignUpAndTextMobile></SignUpAndTextMobile>
       {/* Main container for the middle body */}
       <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1">
-        
-        <div className=" ssm:mx-[1vw] mt-[1vh] bg-[#b3a8a8] p-[1vw] 
+        <div
+          className=" ssm:mx-[1vw] mt-[1vh] bg-[#b3a8a8] p-[1vw] 
         border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
         ssm:w-fit h-fit select-none "
         >

@@ -7,16 +7,20 @@ import {
   getDocs,
   collection,
   DocumentData,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
 /**
- * collections: leaderboard
+ * collection: leaderboard_test
  * documents: easy, medium, hard
- * fields: 0, 1, 2, 3
- * values: {
- *    name
- *    timeUsed
- * }
+ * fields: rank
+ * values: [
+ *  { name: ... , timeUsed: ... },
+ *  {},
+ *  {},
+ *  {},
+ * ]
  */
 
 // initialize the app
@@ -36,41 +40,43 @@ async function readLeaderboard(mode: string) {
   const leaderboardRef = await getDoc(doc(db, "leaderboard/" + mode));
   return leaderboardRef.data();
 }
-
-async function updateLeaderboard(mode: string, data: object) {
-  await updateDoc(doc(db, "leaderboard", mode), data);
-}
-
-/**
- * collection: leaderboard_test
- * documents: easy, medium, hard
- * fields: rank
- * values: [
- *  { name: ... , timeUsed: ... },
- *  {},
- *  {},
- *  {},
- * ]
- */
-
-interface Rank {
+export interface Rank {
   name: string;
   timeUsed: number;
 }
 
 export interface LeaderboardData {
+  index: number;
   mode: string;
   rank: Rank[];
 }
 
 export async function getLeaderBoard(): Promise<LeaderboardData[]> {
-  const querySnapshot = await getDocs(collection(db, "leaderboard_test"));
   const leaderBoard: LeaderboardData[] = [];
-  querySnapshot.forEach(async (doc) => {
+
+  const leaderboardRef = collection(db, "leaderboard_test");
+  const queryData = await getDocs(
+    query(leaderboardRef, orderBy("index", "asc"))
+  );
+
+  queryData.forEach(async (doc) => {
     const documentData: DocumentData = doc.data();
-    leaderBoard.push({ mode: doc.id, rank: documentData.rank });
+    leaderBoard.push({
+      index: documentData.index,
+      mode: doc.id,
+      rank: documentData.rank,
+    });
   });
+
+  console.log(leaderBoard);
+
   return leaderBoard;
 }
 
-export { readLeaderboard, updateLeaderboard };
+export async function updateLeaderboard(currMode: string, newData: any) {
+  // await updateDoc(doc(db, "leaderboard", mode), data);
+  const modeRef = doc(db, "leaderboard_test", currMode);
+  await updateDoc(modeRef, newData);
+}
+
+export { readLeaderboard };
