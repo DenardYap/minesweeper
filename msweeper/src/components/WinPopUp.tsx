@@ -8,8 +8,7 @@ interface WinPopUpProps {
 const WinPopUp: React.FC<WinPopUpProps> = ({showPopUp, gameWonAftermath}) => {
 
   function handleInput(e : any) {
-      if (e.keyCode === 13 || e.keyCode === 229){ //enter key
-        console.log(e.target.value)
+      if (e.keyCode === 13){ //enter key
         gameWonAftermath(e.target.value, true)
         
       }

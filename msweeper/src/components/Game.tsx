@@ -271,13 +271,14 @@ const Game: React.FC<GameProps> = () => {
     let winMode: string;
 
     // TO TEST
+
     if (area < 256) winMode = "easy";
     else if (area < 484) {
-      if (bombRatio <= 0.15625) winMode = "easy";
+      if (bombRatio < 0.15625) winMode = "easy";
       else winMode = "medium";
     } else {
-      if (bombRatio <= 0.1) winMode = "easy";
-      else if (bombRatio <= 0.15625) winMode = "medium";
+      if (bombRatio < 0.15625) winMode = "easy";
+      else if (bombRatio < 0.2066) winMode = "medium";
       else winMode = "hard";
     }
 
@@ -288,7 +289,6 @@ const Game: React.FC<GameProps> = () => {
   async function gameWonAftermath(curName: string, resetOrNot = false) {
     // name and timer is now gathered, update the data
     const winMode = getMode(); //initialize mode to winMode
-    console.log("mode: ", winMode);
 
     // then do the leaderboard calculation here
     // todo: cache the data

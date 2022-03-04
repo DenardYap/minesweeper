@@ -68,8 +68,6 @@ export async function getLeaderBoard(): Promise<LeaderboardData[]> {
     });
   });
 
-  console.log(leaderBoard);
-
   return leaderBoard;
 }
 
