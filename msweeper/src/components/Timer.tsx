@@ -1,7 +1,6 @@
 import React from "react";
 import { timerStatus } from "../utils/statuses";
 import { useState, useEffect } from "react";
-import { start } from "repl";
 interface TimerProps {
   startTimer: boolean;
   gameOver: boolean;

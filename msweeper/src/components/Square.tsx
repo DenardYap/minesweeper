@@ -1,11 +1,12 @@
+import { clear } from "console";
 import React, { useEffect, useState } from "react";
 import { Coordinate } from "../types/SquareType";
 import { squareStatus } from "../utils/statuses";
+import {isMobile, isBrowser} from 'react-device-detect';
 
 // var loc = window.location.pathname;
 // var dir = loc.substring(0, loc.lastIndexOf('/'));
 // console.log(dir);
-
 interface SquareProps {
   rel: string;
   imgStatus: string;
@@ -15,6 +16,8 @@ interface SquareProps {
   coordinate: Coordinate;
 }
 
+const LONGPRESSED_DELAY = 250;
+let buttonPressTimer: ReturnType<typeof setTimeout>;
 const Square: React.FC<SquareProps> = ({
   rel,
   imgStatus,
@@ -25,7 +28,7 @@ const Square: React.FC<SquareProps> = ({
 }) => {
   const [src, setSrc] = useState(squareStatus.SQUARE);
   const [status, setStatus] = useState("SQUARE");
-
+  
   useEffect(() => {
     setStatus(imgStatus);
   }, [imgStatus]);
@@ -34,13 +37,41 @@ const Square: React.FC<SquareProps> = ({
     setSrc(squareStatus[imgSrc]);
   }, [imgSrc]);
 
-  let hFunc = (e : React.MouseEvent<HTMLElement>) => {
+  const hFunc = (e : React.MouseEvent<HTMLElement>) => {
+    
     handleSquareOnClick(e, coordinate.row, coordinate.col);
   }
+
+  const hRightFunc = (e : any) => {
+    e.preventDefault();
+    if (isBrowser) handleRightClick(e, coordinate.row, coordinate.col)
+  }
+
+  //TODO: might need to cancel if touchmove?
+  //TODO: add adding animation
+  //TODO: add shaking effect 
+  const handleButtonPress = (e : any) => {
+    if (isMobile){
+
+      // after 300ms, trigger hRightFunc and set flags 
+      buttonPressTimer = setTimeout(() => handleRightClick(e, coordinate.row, coordinate.col),
+                                    LONGPRESSED_DELAY);
+    }
+  }
+  
+  // if the button is released within 300ms, we clear timeout, rightFunc never gets called
+  const handleButtonRelease = () => {
+    if (isMobile) clearTimeout(buttonPressTimer);
+  }
+
   return (
     <div
       className="bg-white"  
-      onContextMenu= {(e) => handleRightClick(e, coordinate.row, coordinate.col)}
+      onContextMenu= {hRightFunc}
+      onTouchStart={handleButtonPress}
+      onTouchEnd={handleButtonRelease}
+      onTouchCancel={handleButtonRelease}
+      onTouchMove={handleButtonRelease}
       onMouseEnter={hFunc}
       onMouseOut={hFunc}
       onMouseDown={hFunc}

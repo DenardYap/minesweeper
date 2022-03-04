@@ -15,6 +15,7 @@ const SignUpAndTextMobile = () => {
       </button>
       <input
         id="signup-mobile"
+        maxLength={12}
         placeholder={"your name..."}
         type="text"
         className="bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black 
