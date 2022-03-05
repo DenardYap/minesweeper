@@ -40,7 +40,7 @@ let winName = "";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
-const DEFAULT_BOMB_COUNT = 10;
+const DEFAULT_BOMB_COUNT = 0;
 
 interface GameProps {}
 
@@ -310,6 +310,16 @@ const Game: React.FC<GameProps> = () => {
         currModeLeaderboard!.rank.splice(i, 0, newRank);
         currModeLeaderboard!.rank.pop();
         await updateLeaderboard(winMode, { rank: currModeLeaderboard!.rank });
+        fetch("http://localhost:8080/", {
+          method:"POST",
+          
+          headers: {
+            "Authorization": process.env.REACT_APP_API_KEY!,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(currModeLeaderboard)
+
+        })
         break;
       }
       i++;

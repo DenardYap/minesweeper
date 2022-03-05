@@ -7,7 +7,7 @@ const Footer = () => {
                      text-[#373737] bg-[#e2e8f0]
                     sm:h-[21vh] sm:mw-[100%] '>
         <div className='ssm:order-2 sm:order-1 flex ssm:flex-col px-[1vw] text-3xl ssm:items-center sm:items-start'>  
-            <h3 className='pt-[1vh] underline font-bold sm:text-3xl ssm:text-xl'>Design and programmed by</h3>
+            <h3 className='pt-[1vh] underline font-bold sm:text-3xl ssm:text-xl'>Designed and programmed by</h3>
             <div className='flex ssm:flex-col sm:flex-row py-[1vh] '>
             
                 <div className='flex flex-col pr-[1vw] pt-[1vh] ssm:items-center sm:items-start'>

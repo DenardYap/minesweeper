@@ -29,16 +29,34 @@ hard : {
 };
  * 
  */
-let cached: any = {};
+let cached: any = [];
 
 const Leaderboard: React.FC<LeaderboardProps> = () => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>();
 
   useEffect(() => {
-    getLeaderBoard().then((data) => {
-      setLeaderboardData(data);
-    });
-  }, []);
+    
+    fetch("http://localhost:8080/"!, {
+        method: "GET",
+        headers: {
+          Authorization: process.env.REACT_APP_API_KEY!,
+        },
+      })
+        .then((res) => res.json())
+        .then(res => {
+          setLeaderboardData(res)
+        });
+    
+      // let data = res.data;
+    },
+    []
+  )
+  console.log("Leaderboard Data:", leaderboardData)
+  // useEffect(() => {
+  //   getLeaderBoard().then((data) => {
+  //     setLeaderboardData(data);
+  //   });
+  // }, []);
 
   // const [loaded, setLoaded] = useState(false);
   // useEffect(() => {
