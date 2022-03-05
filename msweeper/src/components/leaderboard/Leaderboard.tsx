@@ -16,7 +16,7 @@ const Leaderboard: React.FC<LeaderboardProps> = () => {
     fetch(process.env.REACT_APP_API_URL!, {
         method: "GET",
         headers: {
-          Authorization: process.env.REACT_APP_API_KEY!,
+          "Authorization": process.env.REACT_APP_API_KEY!,
         },
       })
         .then((res) => res.json())
@@ -28,7 +28,6 @@ const Leaderboard: React.FC<LeaderboardProps> = () => {
     },
     []
   )
-  console.log("Leaderboard Data:", leaderboardData)
   // useEffect(() => {
   //   getLeaderBoard().then((data) => {
   //     setLeaderboardData(data);

@@ -1,4 +1,7 @@
-require("dotenv").config({ path: "../.env.local" });
+// require("dotenv").config({ path: "../.env.local" });
+require("dotenv").config();
+
+//TODO: bug to be fixed can't deploy
 
 const {
   initializeApp,
@@ -45,11 +48,13 @@ async function load_data() {
   });
 }
 
-load_data();
-
 app.get("/", async (req, res) => {
   // check authentication (? maybe)
-  if (req.headers.authorization == process.env.REACT_APP_API_KEY) {
+  if (leaderboard.length == 0) {
+    await load_data();
+  }
+  console.log(process.env.REACT_APP_API_KEY);
+  if (req.headers.authorization == process.env.API_KEY) {
     res.status(200).json(leaderboard);
   } else {
     res.status(403).json({ message: "unauthorized" });
@@ -57,7 +62,7 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-  if (req.headers.authorization == process.env.REACT_APP_API_KEY) {
+  if (req.headers.authorization == process.env.API_KEY) {
     leaderboard.forEach((l, index) => {
       if (l.mode === req.body.mode) {
         leaderboard[index] = req.body;

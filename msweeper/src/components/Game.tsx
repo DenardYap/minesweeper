@@ -40,7 +40,7 @@ let winName = "";
 const DEFAULT_VIEW_HEIGHT = 83;
 const DEFAULT_COL = 10;
 const DEFAULT_ROW = 10;
-const DEFAULT_BOMB_COUNT = 0;
+const DEFAULT_BOMB_COUNT = 10;
 
 interface GameProps {}
 
@@ -312,7 +312,6 @@ const Game: React.FC<GameProps> = () => {
         await updateLeaderboard(winMode, { rank: currModeLeaderboard!.rank });
         fetch(process.env.REACT_APP_API_URL!, {
           method:"POST",
-          
           headers: {
             "Authorization": process.env.REACT_APP_API_KEY!,
             'Content-Type': 'application/json'
