@@ -8,29 +8,6 @@ import {
 import LeaderboardItem from "./LeaderboardData";
 interface LeaderboardProps {}
 
-/** for reference 
- * 
-  const data1 = easy : {
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-};
-medium : {
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-hard : {
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-  4: { name: "JingXian Chai 🔥", timeUsed: 200 },
-};
- * 
- */
-let cached: any = [];
-
 const Leaderboard: React.FC<LeaderboardProps> = () => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>();
 
