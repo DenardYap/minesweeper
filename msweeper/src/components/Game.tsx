@@ -310,7 +310,7 @@ const Game: React.FC<GameProps> = () => {
         currModeLeaderboard!.rank.splice(i, 0, newRank);
         currModeLeaderboard!.rank.pop();
         await updateLeaderboard(winMode, { rank: currModeLeaderboard!.rank });
-        fetch("http://localhost:8080/", {
+        fetch(process.env.REACT_APP_API_URL!, {
           method:"POST",
           
           headers: {
