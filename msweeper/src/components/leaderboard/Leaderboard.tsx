@@ -12,22 +12,19 @@ const Leaderboard: React.FC<LeaderboardProps> = () => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>();
 
   useEffect(() => {
-    
     fetch(process.env.REACT_APP_API_URL!, {
-        method: "GET",
-        headers: {
-          "Authorization": process.env.REACT_APP_API_KEY!,
-        },
-      })
-        .then((res) => res.json())
-        .then(res => {
-          setLeaderboardData(res)
-        });
-    
-      // let data = res.data;
-    },
-    []
-  )
+      method: "GET",
+      headers: {
+        Authorization: process.env.REACT_APP_API_KEY!,
+      },
+    }).then(async (res) => {
+      // verify request here (request might be unauthorized)
+      if (res.status == 200) {
+        const leaderboardData = await res.json();
+        setLeaderboardData(leaderboardData);
+      }
+    });
+  }, []);
   // useEffect(() => {
   //   getLeaderBoard().then((data) => {
   //     setLeaderboardData(data);
