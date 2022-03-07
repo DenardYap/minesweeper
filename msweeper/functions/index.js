@@ -66,6 +66,7 @@ app.post("/", async (req, res) => {
     leaderboard.forEach((l, index) => {
       if (l.mode === req.body.mode) {
         leaderboard[index] = req.body;
+        res.status(200).json({ message: "success" });
       }
     });
   } else {

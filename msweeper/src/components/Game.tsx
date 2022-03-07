@@ -21,7 +21,7 @@ import {
   readLeaderboard,
   updateLeaderboard,
 } from "../utils/databaseFunctions";
-import { isMobile, isBrowser } from "react-device-detect";
+import { isMobile, isDesktop } from "react-device-detect";
 
 export const moves = [
   [0, 1],
@@ -88,25 +88,36 @@ const Game: React.FC<GameProps> = () => {
     }
   }
 
-  const handleMouseUp = () => {
-    setMouseUp(true);
-    setMouseDown(false);
+  const handleMouseUp = (e: MouseEvent) => {
+    if (e.button == 0){
+
+      setMouseUp(true);
+      setMouseDown(false);
+    }
   };
 
-  const handleMouseDown = () => {
-    setMouseDown(true);
-    setMouseUp(false);
+  const handleMouseDown = (e: MouseEvent) => {
+    
+    if (e.button == 0){
+
+      setMouseDown(true);
+      setMouseUp(false);
+    }
   };
 
   useEffect(() => {
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseup", (e) => {
+      handleMouseUp(e)
+    });
     return () => {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   });
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mousedown", (e) => {
+      handleMouseDown(e)
+    });
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
     };
@@ -146,14 +157,17 @@ const Game: React.FC<GameProps> = () => {
   }
 
   const handleRightClick = (event: any, curRow: number, curCol: number) => {
-    event.preventDefault(); //prevent the default pop up menu
-    if (!isFirstClick && !gameOver && !gameWon) {
-      if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
-        grid[curRow][curCol].imgSrc = "FLAG";
-        setFlag((flag) => flag + 1);
-      } else if (grid[curRow][curCol].imgSrc == "FLAG") {
-        grid[curRow][curCol].imgSrc = "SQUARE";
-        setFlag((flag) => flag - 1);
+    if (!mouseDown){
+
+      event.preventDefault(); //prevent the default pop up menu
+      if (!isFirstClick && !gameOver && !gameWon) {
+        if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
+          grid[curRow][curCol].imgSrc = "FLAG";
+          setFlag((flag) => flag + 1);
+        } else if (grid[curRow][curCol].imgSrc == "FLAG") {
+          grid[curRow][curCol].imgSrc = "SQUARE";
+          setFlag((flag) => flag - 1);
+        }
       }
     }
   };
@@ -164,9 +178,11 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-    if (event.button == 0) {
+
+    // button 0 for mouse, touchend for phone and tablet 
+    if (event.button == 0 || event.type == "touchend") {
       //left click
-      if (!gameOver && !gameWon && event.type == "mouseup") {
+      if (!gameOver && !gameWon && (event.type == "mouseup" || event.type == "touchend")) {
         setMouseDown(false);
         setFaceSrc(faceStatus.smile);
         if (isFirstClick) {
@@ -383,7 +399,8 @@ const Game: React.FC<GameProps> = () => {
       <LeftBody handleSliderChange={handleSliderChange}></LeftBody>
       <SignUpAndTextMobile></SignUpAndTextMobile>
       {/* Main container for the middle body */}
-      <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1">
+      <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1 "
+          onContextMenu={(e)=>e.preventDefault()}>
         <div
           className=" ssm:mx-[1vw] mt-[1vh] bg-[#b3a8a8] p-[1vw] 
         border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 

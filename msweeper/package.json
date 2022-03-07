@@ -26,7 +26,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "host": "firebase deploy --only hosting",
+    "test": "react-scripts test --verbose false",
     "eject": "react-scripts eject",
     "rest": "node server.js",
     "tailwind:build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",

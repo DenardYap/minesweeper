@@ -2,7 +2,7 @@ import { clear } from "console";
 import React, { useEffect, useState } from "react";
 import { Coordinate } from "../types/SquareType";
 import { squareStatus } from "../utils/statuses";
-import {isMobile, isBrowser} from 'react-device-detect';
+import {isMobile, isDesktop, isTablet} from 'react-device-detect';
 
 // var loc = window.location.pathname;
 // var dir = loc.substring(0, loc.lastIndexOf('/'));
@@ -16,7 +16,8 @@ interface SquareProps {
   coordinate: Coordinate;
 }
 
-const LONGPRESSED_DELAY = 250;
+let timeoutTriggered = false;
+const LONGPRESSED_DELAY = 300;
 let buttonPressTimer: ReturnType<typeof setTimeout>;
 const Square: React.FC<SquareProps> = ({
   rel,
@@ -38,29 +39,50 @@ const Square: React.FC<SquareProps> = ({
   }, [imgSrc]);
 
   const hFunc = (e : React.MouseEvent<HTMLElement>) => {
-    
-    handleSquareOnClick(e, coordinate.row, coordinate.col);
+    if (!isTablet && !isMobile) handleSquareOnClick(e, coordinate.row, coordinate.col);
   }
 
   const hRightFunc = (e : any) => {
     e.preventDefault();
-    if (isBrowser) handleRightClick(e, coordinate.row, coordinate.col)
+    if (!isTablet && !isMobile) handleRightClick(e, coordinate.row, coordinate.col)
   }
 
   //TODO: add adding animation
   //TODO: add shaking effect 
   const handleButtonPress = (e : any) => {
-    if (isMobile){
+    if (isMobile || isTablet){
 
       // after 300ms, trigger hRightFunc and set flags 
-      buttonPressTimer = setTimeout(() => handleRightClick(e, coordinate.row, coordinate.col),
-                                    LONGPRESSED_DELAY);
+      buttonPressTimer = setTimeout(() => {
+
+        timeoutTriggered = true;
+        handleRightClick(e, coordinate.row, coordinate.col)
+      },
+      LONGPRESSED_DELAY);
     }
+
   }
   
   // if the button is released within 300ms, we clear timeout, rightFunc never gets called
-  const handleButtonRelease = () => {
-    if (isMobile) clearTimeout(buttonPressTimer);
+  const handleButtonRelease = (e : any) => {
+    if (isMobile || isTablet) {
+      if (!timeoutTriggered && e.type == "touchend"){
+
+        handleSquareOnClick(e, coordinate.row, coordinate.col);
+      }
+
+      clearTimeout(buttonPressTimer)
+      if (e.type == "touchmove" || e.type == "touchcancel") timeoutTriggered = true;
+      else timeoutTriggered = false;
+      /** Case 1: Touch and released within 300ms 
+       *  OK
+       *  Case 1.2: Touch and move
+       *  OK
+       *  Case 2: Touch and hold for 300 ms and release
+       *  OK
+       *  Case 3: Touch and hold for 300 ms and release after 300 ms
+       */
+    };
   }
 
   return (
@@ -69,8 +91,16 @@ const Square: React.FC<SquareProps> = ({
       onContextMenu= {hRightFunc}
       onTouchStart={handleButtonPress}
       onTouchEnd={handleButtonRelease}
-      onTouchCancel={handleButtonRelease}
-      onTouchMove={handleButtonRelease}
+      onTouchCancel={(e) => {
+        if (!timeoutTriggered) {
+          handleButtonRelease(e)
+        }
+       }}
+      onTouchMove={(e) => {
+        if (!timeoutTriggered) {
+          handleButtonRelease(e)
+        }
+       }}
       onMouseEnter={hFunc}
       onMouseOut={hFunc}
       onMouseDown={hFunc}
