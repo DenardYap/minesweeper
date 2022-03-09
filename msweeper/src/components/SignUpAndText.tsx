@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from 'react';
 import {
   getAuth,
   getRedirectResult,
   GoogleAuthProvider,
   signInWithRedirect,
+  setPersistence,
+  onAuthStateChanged,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  AuthErrorCodes,
+  
+
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import Cookies from 'js-cookie';
+
+// Cookies.set('username', user.uid())
 
 interface User {
   displayName: string;
   photoUrl: string | null;
 }
-
 
 const app = initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -26,8 +36,14 @@ const app = initializeApp({
 const googleProvider = new GoogleAuthProvider();
 const auth = getAuth(app);
 
-
-
+setPersistence(auth, browserLocalPersistence)
+// .then(() => {
+  
+  onAuthStateChanged(auth, async (user) => {
+    console.log("OnAuthStateChanged: ")
+    console.log(user);
+  })
+// });
 const SignUpAndText = () => {
   const [user, setUser] = useState<User | null>(null);
 
@@ -36,18 +52,32 @@ const SignUpAndText = () => {
   };
 
   useEffect(() => {
+    if (Cookies.get("uid")) {
+      const currentUser: User = {
+        displayName: Cookies.get("displayName")
+          ? Cookies.get("displayName")!
+          : `minesweeper ${Cookies.get("uid")!.substring(0, 5)}`,
+        photoUrl: Cookies.get("photoURL") ? Cookies.get("photoURL")! : null,
+      };
+      setUser(currentUser);
+    }
     getRedirectResult(auth)
       .then((result) => {
+        console.log("getRedirectResult: ")
+        console.log(result)
         // This gives you a Google Access Token. You can use it to access Google APIs.
         if (result) {
           const credential = GoogleAuthProvider.credentialFromResult(result);
-          // console.log("credential: ", credential);
+          console.log("credential: ", credential);
 
           const token = credential ? credential.accessToken : null;
-          // console.log("token: ", token);
-
+          console.log("token: ", token);
           // The signed-in user info.
           const { displayName, photoURL, uid } = result.user;
+          Cookies.set("displayName", displayName!, {expires: 7});
+          Cookies.set("photoURL", photoURL!, {expires: 7});
+          Cookies.set("uid", uid, {expires: 7});
+          console.log( result.user);
           const currentUser: User = {
             displayName: displayName
               ? displayName
