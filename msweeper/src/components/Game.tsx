@@ -13,16 +13,46 @@ import LeftBody from "./LeftBody";
 import Leaderboard from "./leaderboard/Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
+
+import SignUpAndText from './SignUpAndText'
+import Slider from './Slider'
+import DifficultyButtons from "./DifficultyButtons"
+
 import { faceStatus } from "../utils/statuses";
 import {
   getLeaderBoard,
-  LeaderboardData,
   Rank,
-  readLeaderboard,
   updateLeaderboard,
+  User,
+  updateUser
 } from "../utils/databaseFunctions";
-import { isMobile, isDesktop } from "react-device-detect";
 
+import {
+  getAuth,
+  setPersistence,
+  inMemoryPersistence,
+  onAuthStateChanged
+} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+// initiaze authenticaftion API for later 
+const app = initializeApp({
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSENGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+});
+const auth = getAuth(app);
+
+// Disable persistence 
+setPersistence(auth, inMemoryPersistence)
+
+onAuthStateChanged(auth, (user:any) => {
+  console.log(user);
+})
 export const moves = [
   [0, 1],
   [0, -1],
@@ -64,6 +94,10 @@ const Game: React.FC<GameProps> = () => {
   const [mouseUp, setMouseUp] = useState(false);
   const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
+
+  // user 
+  const [user, setUser] = useState<User | null>(null);
+  const [uid, setUid] = useState("");
 
   let rel =
     ((1 / Math.max(row, column)) * DEFAULT_VIEW_HEIGHT).toString() + "vh";
@@ -340,6 +374,39 @@ const Game: React.FC<GameProps> = () => {
       i++;
     }
 
+    // get user, get current game mode
+    // totalGame += 1, totalTime += curTime
+    // [mode]Win += 1
+    // compare besttime[mode], if < then update
+    if (user) {
+      // update totalGame, totalTime
+      user.totalGame += 1
+      user.totalTime += winTime
+
+      // update modeWin, BestTimeMode
+      if (winMode == "easy") {
+        user.easyWin += 1
+        if (winTime < user.BestTimeEasy) {
+          user.BestTimeEasy = winTime
+        }
+      } else if (winMode == "medium") {
+        user.mediumWin += 1
+        if (winTime < user.BestTimeMedium) {
+          user.BestTimeMedium = winTime
+        }
+      } else {
+        user.hardWin += 1
+        if (winTime < user.BestTimeHard) {
+          user.BestTimeHard = winTime
+        }
+      }
+      // update user state
+      setUser(user)
+      // update user in database
+      updateUser(uid, user)
+    }
+
+
     // let data: any = {};
     // todo: push every lower index one index lower
     if (resetOrNot) reset();
@@ -395,9 +462,34 @@ const Game: React.FC<GameProps> = () => {
       <WinPopUp showPopUp={showPopUp} gameWonAftermath={gameWonAftermath} />
 
       {/* Left side of the body */}
+      {/* 
+      div
+       * sign up hiden
+       * difficulty button 3
+       * slider 4
+       * 
+       * div
+       * sign up show
+       * board 2
+       * 
+       * leaderboard
+       */}
+      {/* <LeftBody handleSliderChange={handleSliderChange} auth = {auth}></LeftBody> */}
+      
+    <div className="basis-3/12 sm:order-1 ssm:order-2 flex flex-col relative mt-[2vh] ">
+      <div className="ssm:hidden sm:block">
 
-      <LeftBody handleSliderChange={handleSliderChange}></LeftBody>
-      <SignUpAndTextMobile></SignUpAndTextMobile>
+        <SignUpAndText auth = {auth} user={user} setUser={setUser} uid={uid} setUid={setUid}></SignUpAndText>
+      </div>
+          <DifficultyButtons handleSliderChange={handleSliderChange}></DifficultyButtons>
+          <Slider handleSliderChange={handleSliderChange} />
+      </div>
+      
+      <div className="sm:hidden ssm:block"> 
+        <SignUpAndText auth = {auth} user={user} setUser={setUser} uid={uid} setUid={setUid}></SignUpAndText>
+      </div>
+{/* 
+      <SignUpAndTextMobile auth = {auth}></SignUpAndTextMobile> */}
       {/* Main container for the middle body */}
       <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1 "
           onContextMenu={(e)=>e.preventDefault()}>

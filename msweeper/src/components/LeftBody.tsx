@@ -5,13 +5,14 @@ import DifficultyButtons from "./DifficultyButtons"
 
 interface LeftBodyProps {
     handleSliderChange : any;
+    auth : any;
 }
-const LeftBody: React.FC<LeftBodyProps> = ({handleSliderChange}) => {
-
+const LeftBody: React.FC<LeftBodyProps> = ({handleSliderChange, auth}) => {
+  
 
   return (
     <div className="basis-3/12 sm:order-1 ssm:order-2 flex flex-col relative mt-[2vh] ">
-        <SignUpAndText></SignUpAndText>
+        {/* <SignUpAndText auth = {auth}></SignUpAndText> */}
         <DifficultyButtons handleSliderChange={handleSliderChange}></DifficultyButtons>
         <Slider handleSliderChange={handleSliderChange} />
     </div>

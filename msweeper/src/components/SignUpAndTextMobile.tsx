@@ -1,12 +1,31 @@
 import React from 'react'
 
-const SignUpAndTextMobile = () => {
+import {
+  getRedirectResult,
+  GoogleAuthProvider,
+  signInWithRedirect,
+
+} from "firebase/auth";
+import Cookies from 'js-cookie';
+
+
+interface User {
+  displayName: string;
+  photoUrl: string | null;
+}
+
+interface SignUpAndTextProps {
+  auth : any;
+}
+const googleProvider = new GoogleAuthProvider();
+
+const SignUpAndTextMobile : React.FC<SignUpAndTextProps> = ({auth}) => {
   return (
     
       
 <>
     <div
-      className="flex flex-row text-[100%] ssm:order-1 sm:hidden ssm:mt-[1vh]"
+      className="flex flex-row text-[100%] ssm:order-1 ssm:mt-[1vh]"
     >
       <button className="inline-block
       text-[125%] text-center bg-slate-400 font-bold hover:bg-slate-200 hover:text-black text-inherit text-white rounded  shadow-md hover:shadow-lg

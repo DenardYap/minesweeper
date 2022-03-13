@@ -13,6 +13,7 @@ const Leaderboard: React.FC<LeaderboardProps> = () => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL!, {
+      // fetch("http://localhost:8080", {
       method: "GET",
       headers: {
         Authorization: process.env.REACT_APP_API_KEY!,
