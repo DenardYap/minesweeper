@@ -18,21 +18,30 @@ const functions = require("firebase-functions");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    // allowedHeaders: ["Content-Type", "Authorization"],
+    // methods: ["GET", "POST", "DELETE"],
+    credentials: true,
+  })
+);
 
 // some middleware for testing with localhost
-let allowCrossDomain = function (req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "https://msweeper.com");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Headers", "Authorization, content-type");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
-  res.header("Cache-Control", "private");
-  next();
-};
-app.use(allowCrossDomain);
+// let allowCrossDomain = function (req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "https://msweeper.com");
+//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.header("Access-Control-Allow-Headers", "Authorization, content-type");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE");
+//   res.header("Cache-Control", "private");
+//   next();
+// };
+// app.use(allowCrossDomain);
 app.use(cookieParser());
 
 const serviceAccount = JSON.parse(process.env.CREDENTIALS);
@@ -85,6 +94,7 @@ app.post("/", async (req, res) => {
 // when a new signup is detected, this end point is called
 // and a cookie is set for the client
 app.post("/signup", (req, res) => {
+  console.log("cookies from sign up route", req.cookies);
   // Authorize with API_KEY...
   console.log("signing in...");
   if (req.headers.authorization == process.env.API_KEY) {

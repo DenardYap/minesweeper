@@ -12,13 +12,17 @@ const Leaderboard: React.FC<LeaderboardProps> = () => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>();
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_API_URL!, {
-      // fetch("http://localhost:8080", {
-      method: "GET",
-      headers: {
-        Authorization: process.env.REACT_APP_API_KEY!,
-      },
-    }).then(async (res) => {
+    fetch(
+      // process.env.REACT_APP_EMU_API_URL!,
+      "http://localhost:5001/minesweeper-9667e/us-central1/leaderboard/",
+      {
+        // fetch("http://localhost:8080", {
+        method: "GET",
+        headers: {
+          Authorization: process.env.REACT_APP_API_KEY!,
+        },
+      }
+    ).then(async (res) => {
       // verify request here (request might be unauthorized)
       if (res.status == 200) {
         const leaderboardData = await res.json();
