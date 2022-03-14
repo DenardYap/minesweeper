@@ -24,9 +24,9 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    // allowedHeaders: ["Content-Type", "Authorization"],
-    // methods: ["GET", "POST", "DELETE"],
+    origin: ["http://localhost:3000", "https://msweeper.com"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "DELETE"],
     credentials: true,
   })
 );

@@ -64,18 +64,14 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
     setShow(false);
     setUser(null);
 
-    // fetch(`${process.env.REACT_APP_API_URL!}/delete`, {
-    fetch(
-      `http://localhost:5001/minesweeper-9667e/us-central1/leaderboard/delete`,
-      {
-        // fetch(`http://localhost:8080/delete`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          Authorization: process.env.REACT_APP_API_KEY!,
-        },
-      }
-    );
+    fetch(`${process.env.REACT_APP_API_URL!}/delete`, {
+      // fetch(`http://localhost:8080/delete`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        Authorization: process.env.REACT_APP_API_KEY!,
+      },
+    });
 
     console.log("User signed out.");
   };
@@ -100,18 +96,14 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
     (async () => {
       // verify uid, if true then log user in
       // verify first
-      // fetch(`${process.env.REACT_APP_API_URL!}/login`, {
-      fetch(
-        `http://localhost:5001/minesweeper-9667e/us-central1/leaderboard/login`,
-        {
-          // fetch(`http://localhost:8080/login`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            Authorization: process.env.REACT_APP_API_KEY!,
-          },
-        }
-      )
+      fetch(`${process.env.REACT_APP_API_URL!}/login`, {
+        // fetch(`http://localhost:8080/login`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Authorization: process.env.REACT_APP_API_KEY!,
+        },
+      })
         .then((res) => res.json())
         .then(async (res) => {
           if (res.uid) {
@@ -134,20 +126,16 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
           const idToken = await result.user.getIdToken();
 
           // post request to get cookie
-          // fetch(`${process.env.REACT_APP_API_URL!}/signup`, {
-          fetch(
-            `http://localhost:5001/minesweeper-9667e/us-central1/leaderboard/signup`,
-            {
-              // fetch(`http://localhost:8080/signup`, {
-              method: "POST",
-              credentials: "include", // Don't forget to specify this if you need cookies
-              headers: {
-                Authorization: process.env.REACT_APP_API_KEY!,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ idToken }),
-            }
-          ).then(async (res) => console.log("Asd", await res));
+          fetch(`${process.env.REACT_APP_API_URL!}/signup`, {
+            // fetch(`http://localhost:8080/signup`, {
+            method: "POST",
+            credentials: "include", // Don't forget to specify this if you need cookies
+            headers: {
+              Authorization: process.env.REACT_APP_API_KEY!,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ idToken }),
+          }).then(async (res) => console.log("Asd", await res));
 
           //update database
           /** check if exists or not, if no, append a record

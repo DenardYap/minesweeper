@@ -14,9 +14,9 @@ import Leaderboard from "./leaderboard/Leaderboard";
 import WinPopUp from "./WinPopUp";
 import SignUpAndTextMobile from "./SignUpAndTextMobile";
 
-import SignUpAndText from './SignUpAndText'
-import Slider from './Slider'
-import DifficultyButtons from "./DifficultyButtons"
+import SignUpAndText from "./SignUpAndText";
+import Slider from "./Slider";
+import DifficultyButtons from "./DifficultyButtons";
 
 import { faceStatus } from "../utils/statuses";
 import {
@@ -24,18 +24,18 @@ import {
   Rank,
   updateLeaderboard,
   User,
-  updateUser
+  updateUser,
 } from "../utils/databaseFunctions";
 
 import {
   getAuth,
   setPersistence,
   inMemoryPersistence,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
-// initiaze authenticaftion API for later 
+// initiaze authenticaftion API for later
 const app = initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -47,12 +47,12 @@ const app = initializeApp({
 });
 const auth = getAuth(app);
 
-// Disable persistence 
-setPersistence(auth, inMemoryPersistence)
+// Disable persistence
+setPersistence(auth, inMemoryPersistence);
 
-onAuthStateChanged(auth, (user:any) => {
+onAuthStateChanged(auth, (user: any) => {
   console.log(user);
-})
+});
 export const moves = [
   [0, 1],
   [0, -1],
@@ -95,7 +95,7 @@ const Game: React.FC<GameProps> = () => {
   const [faceSrc, setFaceSrc] = useState(faceStatus.smile);
   const [facePressed, setFacePressed] = useState(false);
 
-  // user 
+  // user
   const [user, setUser] = useState<User | null>(null);
   const [uid, setUid] = useState("");
 
@@ -123,17 +123,14 @@ const Game: React.FC<GameProps> = () => {
   }
 
   const handleMouseUp = (e: MouseEvent) => {
-    if (e.button == 0){
-
+    if (e.button == 0) {
       setMouseUp(true);
       setMouseDown(false);
     }
   };
 
   const handleMouseDown = (e: MouseEvent) => {
-    
-    if (e.button == 0){
-
+    if (e.button == 0) {
       setMouseDown(true);
       setMouseUp(false);
     }
@@ -141,7 +138,7 @@ const Game: React.FC<GameProps> = () => {
 
   useEffect(() => {
     document.addEventListener("mouseup", (e) => {
-      handleMouseUp(e)
+      handleMouseUp(e);
     });
     return () => {
       document.removeEventListener("mouseup", handleMouseUp);
@@ -150,7 +147,7 @@ const Game: React.FC<GameProps> = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", (e) => {
-      handleMouseDown(e)
+      handleMouseDown(e);
     });
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
@@ -160,6 +157,26 @@ const Game: React.FC<GameProps> = () => {
   useEffect(() => {
     if (gameOver) {
       setFaceSrc(faceStatus.dead);
+      if (user) {
+        // update totalGame, totalTime
+        user.totalGame += 1;
+        // user.totalTime += winTime
+
+        // getmode
+        const winMode = getMode();
+        // update modeWin, BestTimeMode
+        if (winMode == "easy") {
+          user.easyLose += 1;
+        } else if (winMode == "medium") {
+          user.mediumLose += 1;
+        } else {
+          user.hardLose += 1;
+        }
+        // update user state
+        setUser(user);
+        // update user in database
+        updateUser(uid, user);
+      }
     }
     if (gameWon) {
       setFaceSrc(faceStatus.sunglasses);
@@ -191,8 +208,7 @@ const Game: React.FC<GameProps> = () => {
   }
 
   const handleRightClick = (event: any, curRow: number, curCol: number) => {
-    if (!mouseDown){
-
+    if (!mouseDown) {
       event.preventDefault(); //prevent the default pop up menu
       if (!isFirstClick && !gameOver && !gameWon) {
         if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
@@ -212,11 +228,14 @@ const Game: React.FC<GameProps> = () => {
     curRow: number,
     curCol: number
   ) => {
-
-    // button 0 for mouse, touchend for phone and tablet 
+    // button 0 for mouse, touchend for phone and tablet
     if (event.button == 0 || event.type == "touchend") {
       //left click
-      if (!gameOver && !gameWon && (event.type == "mouseup" || event.type == "touchend")) {
+      if (
+        !gameOver &&
+        !gameWon &&
+        (event.type == "mouseup" || event.type == "touchend")
+      ) {
         setMouseDown(false);
         setFaceSrc(faceStatus.smile);
         if (isFirstClick) {
@@ -361,14 +380,13 @@ const Game: React.FC<GameProps> = () => {
         currModeLeaderboard!.rank.pop();
         await updateLeaderboard(winMode, { rank: currModeLeaderboard!.rank });
         fetch(process.env.REACT_APP_API_URL!, {
-          method:"POST",
+          method: "POST",
           headers: {
-            "Authorization": process.env.REACT_APP_API_KEY!,
-            'Content-Type': 'application/json'
+            Authorization: process.env.REACT_APP_API_KEY!,
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(currModeLeaderboard)
-
-        })
+          body: JSON.stringify(currModeLeaderboard),
+        });
         break;
       }
       i++;
@@ -380,32 +398,31 @@ const Game: React.FC<GameProps> = () => {
     // compare besttime[mode], if < then update
     if (user) {
       // update totalGame, totalTime
-      user.totalGame += 1
-      user.totalTime += winTime
+      user.totalGame += 1;
+      user.totalTime += winTime;
 
       // update modeWin, BestTimeMode
       if (winMode == "easy") {
-        user.easyWin += 1
+        user.easyWin += 1;
         if (winTime < user.BestTimeEasy) {
-          user.BestTimeEasy = winTime
+          user.BestTimeEasy = winTime;
         }
       } else if (winMode == "medium") {
-        user.mediumWin += 1
+        user.mediumWin += 1;
         if (winTime < user.BestTimeMedium) {
-          user.BestTimeMedium = winTime
+          user.BestTimeMedium = winTime;
         }
       } else {
-        user.hardWin += 1
+        user.hardWin += 1;
         if (winTime < user.BestTimeHard) {
-          user.BestTimeHard = winTime
+          user.BestTimeHard = winTime;
         }
       }
       // update user state
-      setUser(user)
+      setUser(user);
       // update user in database
-      updateUser(uid, user)
+      updateUser(uid, user);
     }
-
 
     // let data: any = {};
     // todo: push every lower index one index lower
@@ -475,24 +492,39 @@ const Game: React.FC<GameProps> = () => {
        * leaderboard
        */}
       {/* <LeftBody handleSliderChange={handleSliderChange} auth = {auth}></LeftBody> */}
-      
-    <div className="basis-3/12 sm:order-1 ssm:order-2 flex flex-col relative mt-[2vh] ">
-      <div className="ssm:hidden sm:block">
 
-        <SignUpAndText auth = {auth} user={user} setUser={setUser} uid={uid} setUid={setUid}></SignUpAndText>
+      <div className="basis-3/12 sm:order-1 ssm:order-2 flex flex-col relative mt-[2vh] ">
+        <div className="ssm:hidden sm:block">
+          <SignUpAndText
+            auth={auth}
+            user={user}
+            setUser={setUser}
+            uid={uid}
+            setUid={setUid}
+          ></SignUpAndText>
+        </div>
+        <DifficultyButtons
+          handleSliderChange={handleSliderChange}
+        ></DifficultyButtons>
+        <Slider handleSliderChange={handleSliderChange} />
       </div>
-          <DifficultyButtons handleSliderChange={handleSliderChange}></DifficultyButtons>
-          <Slider handleSliderChange={handleSliderChange} />
+
+      <div className="sm:hidden ssm:block">
+        <SignUpAndText
+          auth={auth}
+          user={user}
+          setUser={setUser}
+          uid={uid}
+          setUid={setUid}
+        ></SignUpAndText>
       </div>
-      
-      <div className="sm:hidden ssm:block"> 
-        <SignUpAndText auth = {auth} user={user} setUser={setUser} uid={uid} setUid={setUid}></SignUpAndText>
-      </div>
-{/* 
+      {/* 
       <SignUpAndTextMobile auth = {auth}></SignUpAndTextMobile> */}
       {/* Main container for the middle body */}
-      <div className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1 "
-          onContextMenu={(e)=>e.preventDefault()}>
+      <div
+        className="ssm:flex ssm:flex-row ssm:justify-center sm:block sm:order-2 ssm:order-1 "
+        onContextMenu={(e) => e.preventDefault()}
+      >
         <div
           className=" ssm:mx-[1vw] mt-[1vh] bg-[#b3a8a8] p-[1vw] 
         border-solid border-[0.2em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
