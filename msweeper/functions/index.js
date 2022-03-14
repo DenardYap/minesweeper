@@ -18,9 +18,18 @@ const functions = require("firebase-functions");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://msweeper.com"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "DELETE"],
+    credentials: true,
+  })
+);
 
 // some middleware for testing with localhost
 let allowCrossDomain = function (req, res, next) {
@@ -85,6 +94,7 @@ app.post("/", async (req, res) => {
 // when a new signup is detected, this end point is called
 // and a cookie is set for the client
 app.post("/signup", (req, res) => {
+  console.log("cookies from sign up route", req.cookies);
   // Authorize with API_KEY...
   console.log("signing in...");
   if (req.headers.authorization == process.env.API_KEY) {
