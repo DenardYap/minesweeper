@@ -34,6 +34,15 @@ import { tokenToString } from "typescript";
 LAST) Cypress & Jest & Test
 strictly same site, http only and secure
  */
+
+/** Overview of what to do 
+ * 1) User sign in, get UID and post it to the backend, backend respond with a JWT, 
+ *    then store the JWT in the cookie
+ * 2) User open the website, cookie is present, then we take the cookie and send it 
+ *    to the backend to verify, if user is real, update the name and stuff, if not
+ *    then do no
+ * 
+ */
 interface SignUpAndTextProps {
   auth: any;
   user: User | null;
@@ -72,7 +81,6 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
         Authorization: process.env.REACT_APP_API_KEY!,
       },
     });
-
     console.log("User signed out.");
   };
 
@@ -123,7 +131,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
           const { uid } = result.user;
           setUid(uid);
 
-          const idToken = await result.user.getIdToken();
+          // const idToken = await result.user.getIdToken();
 
           // post request to get cookie
           fetch(`${process.env.REACT_APP_API_URL!}/signup`, {
@@ -134,7 +142,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
               Authorization: process.env.REACT_APP_API_KEY!,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ idToken }),
+            body: JSON.stringify({ uid }),
           }).then(async (res) => console.log("Asd", await res));
 
           //update database
