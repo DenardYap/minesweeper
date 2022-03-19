@@ -20,7 +20,7 @@ const Timer: React.FC<TimerProps> = ({ startTimer, gameOver, gameWon, setWinTime
       if (!gameWon && !gameOver) {
         setTime(0);
       }
-      if (gameWon) setWinTime(time);
+      if (gameWon || gameOver) setWinTime(time);
     }
 
     // useeffect clean up function

@@ -84,6 +84,7 @@ const Game: React.FC<GameProps> = () => {
   const [gameOver, setGameOver] = useState(false);
   const [isFirstClick, setIsFirstClick] = useState(true);
   const [grid, setGrid] = useState(getGrid(row, column));
+  const [coin, setCoin] = useState(0);
   // total available grid e.g. 10 x 10 and 10 bombs = 90 grids
   const [totalGrid, setTotalGrid] = useState(row * column - bombCount);
   const [asd, setAsd] = useState(false);
@@ -164,7 +165,10 @@ const Game: React.FC<GameProps> = () => {
 
         // getmode
         const winMode = getMode();
+        // add time for lose
         // update modeWin, BestTimeMode
+        user.totalTime += winTime;
+        user.goldCoins += coin 
         if (winMode == "easy") {
           user.easyLose += 1;
         } else if (winMode == "medium") {
@@ -186,6 +190,7 @@ const Game: React.FC<GameProps> = () => {
   // function to reset the game
   function reset(newRow = row, newColumn = column, newBombCount = bombCount) {
     setIsFirstClick(true);
+    setCoin(0);
     setFlag(0);
     setGrid(getGrid(newRow, newColumn));
     setTotalGrid(newRow * newColumn - newBombCount);
@@ -214,9 +219,15 @@ const Game: React.FC<GameProps> = () => {
         if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
           grid[curRow][curCol].imgSrc = "FLAG";
           setFlag((flag) => flag + 1);
+          if (grid[curRow][curCol].status == "BOMB") {
+            setCoin((coin) => coin + 1)
+          }
         } else if (grid[curRow][curCol].imgSrc == "FLAG") {
           grid[curRow][curCol].imgSrc = "SQUARE";
           setFlag((flag) => flag - 1);
+          if (grid[curRow][curCol].status == "BOMB") {
+            setCoin((coin) => coin - 1)
+          }
         }
       }
     }
@@ -404,16 +415,19 @@ const Game: React.FC<GameProps> = () => {
       // update modeWin, BestTimeMode
       if (winMode == "easy") {
         user.easyWin += 1;
+        user.goldCoins += coin + 5
         if (winTime < user.BestTimeEasy) {
           user.BestTimeEasy = winTime;
         }
       } else if (winMode == "medium") {
         user.mediumWin += 1;
+        user.goldCoins += coin + 20
         if (winTime < user.BestTimeMedium) {
           user.BestTimeMedium = winTime;
         }
       } else {
         user.hardWin += 1;
+        user.goldCoins += coin + 50
         if (winTime < user.BestTimeHard) {
           user.BestTimeHard = winTime;
         }
