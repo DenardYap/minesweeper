@@ -4,18 +4,18 @@ It has a more modern UI than the other Minesweeper websites (I will let you judg
 
 <br/>
 <h1> Website link: https://msweeper.com </h1> 
-<br/>
 
 <h1> Todo </h1>
 <h2> These are the list of things we will work on when we are free: </h2>
-<li>
-  1. In game store 
-  2. Better UI/UX and layout (mobile and more general)
-  3. Animation for flag for mobile
-  4. Media queries for middle sized device 
-  5. Google-map like zoom in/out for laptop! (if you think this is really cool and want it, please tell us at the feedback form below!)
-  6. Search Engine Optimization & monetize (maybe) 
-</li>
+<ol>
+  <li> In game store </li>
+  <li> Better UI/UX and layout (mobile and more general) </li>
+  <li> Animation for flag for mobile </li>
+  <li> Media queries for middle sized device </li>
+  <li> Google-map like zoom in/out for laptop! (if you think this is really cool and want it, please tell us at the feedback form below!)</li>
+  <li> Search Engine Optimization & monetize (maybe) </li>
+  
+</ol>
 
 <br/>
 
