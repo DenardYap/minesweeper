@@ -1,6 +1,6 @@
 <h1> <a href="https://msweeper.com"> Minesweeper App </a> </h1>
 Hello y'all Minesweepers! We really love Minesweeper so we made this website for you to play Minesweeper! <br/>
-It has a more modern UI than the other Minesweeper websites (I will let you judge) while still preserving the old school design, we also incorporated features such as sliderbar for the difficulty (try swiping it!!), Leaderboard (be on the top 😎), and lastly profile stats (winrate, total game, etc) and profile store (coming soon! buy stuff with in game coins 💰💰)
+It has a more modern UI than the other Minesweeper websites (I will let you judge) while still preserving the old school design, we also incorporated features such as sliderbar for the difficulty (try swiping it!!), Leaderboard (be on the top 😎), and lastly profile stats (winrate, total game, etc) and in-game store (coming soon! buy stuff with in game coins 💰💰)
 
 <br/>
 <h1> Website link: https://msweeper.com </h1> 
