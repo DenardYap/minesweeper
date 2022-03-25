@@ -18,8 +18,7 @@ It has a more modern UI than the other Minesweeper websites (I will let you judg
 </ol>
 
 <h1> Technical Details </h1>
-
-<br/>
+<li> Tech stacks: JavaScript/TypeScript, Firebase, React, TailwindCSS and Express. </li> 
 <h3>
 Developers: <a href="https://github.com/DenardYap"> Bernard Yap </a> | <a href="https://github.com/jingxian01"> Jing Xian Chai</a> </br>
 Please submit any feedbacks/critiques/thoughts onto this <a href= "https://docs.google.com/forms/d/e/1FAIpQLSe3sQJtLYV5iZ6kCK74OGhEaCykoJqktLfuJwX2Xag0J_Z1GQ/viewform"> feedback form </a> 
