@@ -3,7 +3,8 @@ Hello y'all Minesweepers! We really love Minesweeper so we made this website for
 It has a more modern UI than the other Minesweeper websites (I will let you judge) while still preserving the old school design, we also incorporated features such as sliderbar for the difficulty (try swiping it!!), Leaderboard (be on the top 😎), and lastly profile stats (winrate, total game, etc) and in-game store (coming soon! buy stuff with in game coins 💰💰)
 
 <br/>
-<h1> Website link: https://msweeper.com </h1> 
+<h1> Website </h1> </br>
+<h2>  https://msweeper.com </h2>
 
 <h1> Todo </h1>
 <h2> These are the list of things we will work on when we are free: </h2>
