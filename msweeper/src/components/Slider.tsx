@@ -111,7 +111,7 @@ const Slider: React.FC<SliderProps> = ({ handleSliderChange }) => {
       <input className="order-2 sm:relative cursor-pointer 
        bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
        shadow-button hover:shadow-lg font-bold 
-      sm:top-[800%] ssm:w-[80%] sm:w-[40%] ssm:mt-[22vh] sm:mt-[0vh]" type="submit" />
+      sm:top-[800%] ssm:w-[80%] sm:w-[40%] ssm:mt-[22vh] sm:mt-[0vh] transition-all" type="submit" />
     </form>
   );
 };

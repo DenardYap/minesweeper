@@ -10,21 +10,21 @@ const DifficultyButtons : React.FC<DifficultyButtonsProps> = ({handleSliderChang
         <button 
         className="basis-3/12 cursor-pointer shadow-button hover:shadow-lg 
         font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
-        mx-[1vw] ssm:py-[2vh]"
+        mx-[1vw] ssm:py-[2vh] transition-all"
         onClick={(e) => handleSliderChange(10, 10, 10)}>
         Easy
         </button>
         <button 
         className="basis-3/12 cursor-pointer shadow-button hover:shadow-lg
         font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
-        mx-[1vw] ssm:py-[2vh] "
+        mx-[1vw] ssm:py-[2vh] transition-all"
         onClick={(e) => handleSliderChange(16, 16, 40)}>
         Medium
         </button>
         <button 
         className="basis-3/12 cursor-pointer shadow-button hover:shadow-lg
         font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
-        mx-[1vw] ssm:py-[2vh] "
+        mx-[1vw] ssm:py-[2vh] transition-all"
         onClick={(e) => handleSliderChange(22, 22, 100)}>
         Hard
       </button>

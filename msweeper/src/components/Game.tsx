@@ -46,7 +46,6 @@ const app = initializeApp({
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 });
 const auth = getAuth(app);
-
 // Disable persistence
 setPersistence(auth, inMemoryPersistence);
 
@@ -216,6 +215,7 @@ const Game: React.FC<GameProps> = () => {
     if (!mouseDown) {
       event.preventDefault(); //prevent the default pop up menu
       if (!isFirstClick && !gameOver && !gameWon) {
+        
         if (flag !== bombCount && grid[curRow][curCol].imgSrc == "SQUARE") {
           grid[curRow][curCol].imgSrc = "FLAG";
           setFlag((flag) => flag + 1);

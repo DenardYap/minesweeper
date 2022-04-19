@@ -56,6 +56,7 @@ const Square: React.FC<SquareProps> = ({
       buttonPressTimer = setTimeout(() => {
 
         timeoutTriggered = true;
+        navigator.vibrate(200);
         handleRightClick(e, coordinate.row, coordinate.col)
       },
       LONGPRESSED_DELAY);

@@ -172,7 +172,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
       {user ? (
         <div className="sm:flex flex-row  text-[100%] ">
           {show ? (
-            <div className="fixed h-[105vh] w-[100vw] bg-[#00000070] z-[1000] bottom-[0.5vh] top-[0.5vh]">
+            <div className="fixed h-[105vh] w-[100vw] bg-[#00000070] z-[1000] bottom-[0.5vh] top-[0.5vh] transition animate-fade-in">
               <div
                 className="fixed h-[90vh] w-[50vw] bg-[#646464] 
           border-solid border-[0.4em] border-l-white border-t-white border-r-[#999] border-b-[#999] 
@@ -185,7 +185,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
                     {user.name}'s Profile Stats 📜
                   </h2>
                   <CgCloseR
-                    className="cursor-pointer hover:text-[#bd0404] text-[#ff3c2e]"
+                    className="cursor-pointer hover:text-[#bd0404] text-[#ff3c2e] transition-all"
                     size={"3vw"}
                     onClick={() => setShow(false)}
                   ></CgCloseR>
@@ -244,7 +244,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
                     <button
                       className="cursor-pointer shadow-button hover:shadow-lg text-[1.5vw]
                   font-bold bg-slate-400 rounded text-white p-[1vw] hover:bg-slate-200 hover:text-black border-black
-                  mt-[1vw] ssm:py-[2vh] my-[1vh]"
+                  mt-[1vw] ssm:py-[2vh] my-[1vh] transition-all"
                       onClick={handleOnClickSignOut}
                     >
                       {" "}
@@ -260,7 +260,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
           <button
             className="inline-block
     text-[100%] text-center bg-slate-400 font-bold  hover:bg-slate-200 hover:text-black text-inherit text-white rounded  shadow-md hover:shadow-lg
-    w-[30vw] mb-[1vh] ssm:w-[30%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] "
+    w-[30vw] mb-[1vh] ssm:w-[30%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] transition-all"
             onClick={() => setShow(true)}
           >
             Profile
@@ -275,7 +275,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
             type="text"
             className="bg-slate-400 text-white hover:bg-slate-200 hover:text-black hover:placeholder-black 
       placeholder-white shadow-md hover:shadow-lg border-2 border-grey-700 rounded
-      w-[60vw] sm:w-[80%] h-[6vh] px-[2%] mx-[1.25vw] "
+      w-[60vw] sm:w-[80%] h-[6vh] px-[2%] mx-[1.25vw] transition-all"
           />
         </div>
       ) : (
@@ -283,7 +283,7 @@ const SignUpAndText: React.FC<SignUpAndTextProps> = ({
           <button
             className="inline-block
       text-[100%] text-center bg-slate-400 font-bold  hover:bg-slate-200 hover:text-black text-inherit text-white rounded  shadow-md hover:shadow-lg
-      w-[25vw] mb-[1vh] ssm:w-[30%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] "
+      w-[25vw] mb-[1vh] ssm:w-[30%] h-[6vh] ssm:ml-[4vw] ssm:mr-[1vw] sm:mx-[1vw] transition-all"
             onClick={handleOnClickSignIn}
           >
             Sign on
