@@ -26,7 +26,7 @@ const Footer = () => {
                         <a href="mailto:jingxianchai01@gmail.com"><AiOutlineMail size={30} /></a>
                     </div>
                     <div className='flex flex-row items-center '>
-                        <a href='https://github.com/jingxian01' target="_blank" className='pr-[0.5vw]'><AiFillGithub size={50} /></a>
+                        <a href='https://github.com/jxianc' target="_blank" className='pr-[0.5vw]'><AiFillGithub size={50} /></a>
                         <a href='https://www.linkedin.com/in/jingxianchai' target="_blank"><AiFillLinkedin size={50} /></a>
                     </div>
                 </div>
